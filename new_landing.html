@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperStyle - Find your favorite looks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Archivo+Black&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ========== LOADER ========== */
+        #loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        .loader-content {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 300px;
+            height: 300px;
+        }
+
+        .progress-ring {
+            position: absolute;
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.1s linear;
+            stroke: #721612;
+            /* Reddish color based on screenshot */
+            stroke-linecap: round;
+        }
+
+        #loader-counter {
+            font-size: 72px;
+            font-weight: 300;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Logo Phase */
+        #loader-logo-phase {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease;
+        }
+
+        #loader-logo-phase.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Card wrapper — portrait, tilted, centered */
+        .logo-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-card {
+            position: relative;
+            width: min(420px, 52vw);
+            height: min(580px, 72vh);
+            border-radius: 20px;
+            overflow: hidden;
+            transform: rotate(-8deg) scale(0.9);
+            transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 50px 120px rgba(0, 0, 0, 0.85);
+            flex-shrink: 0;
+        }
+
+        #loader-logo-phase.active .logo-card {
+            transform: rotate(-8deg) scale(1);
+        }
+
+        .logo-bg-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.55);
+            display: block;
+        }
+
+        /* White logo image — floats over the center of the card, outside overflow:hidden */
+        .superstyle-logo-img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, calc(-50% + 20px));
+            width: min(360px, 38vw);
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.8s ease 0.5s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s;
+            filter: brightness(0) invert(1);
+            pointer-events: none;
+        }
+
+        #loader-logo-phase.active .superstyle-logo-img {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Prevent scroll during load */
+        body.loading {
+            overflow: hidden !important;
+        }
+
+        :root {
+            --primary-red: #E53E3E;
+            --bg-black: #000000;
+            --panel-dark: #0A0A0A;
+            --panel-border: #1a1a1a;
+            --text-gray: #7A7A7A;
+            --text-light-gray: #B0B0B0;
+            --text-white: #FFFFFF;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-logo: 'Archivo Black', sans-serif;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        /* ========== LEFT PANEL ========== */
+        .gallery-panel {
+            flex: 0 0 50%;
+            height: 100vh;
+            position: relative;
+            background: #111;
+            overflow: hidden;
+            border-right: 1px solid #333;
+        }
+
+        .gallery-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            gap: 2px;
+            transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.4s ease;
+            cursor: none;
+            /* Hide default on gallery */
+        }
+
+        /* Custom Cursor */
+        /* Per-image TRY ME cursor */
+        .gallery-item-wrap {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        .img-cursor {
+            position: absolute;
+            width: 84px;
+            height: 84px;
+            background: #FFFFFF;
+            border-radius: 50%;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.28s cubic-bezier(0.19, 1, 0.22, 1);
+            color: #000000;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            top: 50%;
+            left: 50%;
+            will-change: transform;
+        }
+
+        .img-cursor.active {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Hide on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            .img-cursor {
+                display: none !important;
+            }
+
+            .gallery-item-wrap {
+                cursor: auto;
+            }
+        }
+
+        /* Bidirectional Sliding */
+        .gallery-container.slide-left-out {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+
+        .gallery-container.slide-right-out {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        .gallery-container.slide-left-in {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+
+        .gallery-container.slide-right-in {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        /* Dynamic Grid Layouts */
+        /* Premium Gallery Grids */
+        .gallery-container {
+            display: grid;
+            gap: 2px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .gallery-container.grid-1 {
+            grid-template-columns: 1fr;
+        }
+
+        .gallery-container.grid-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        /* Grid 3-5: Large Hero on Left */
+        .gallery-container.grid-3 {
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: repeat(2, 1fr);
+        }
+
+        .gallery-container.grid-3 .gallery-item-wrap:nth-child(1) {
+            grid-row: span 2;
+        }
+
+        .gallery-container.grid-4 {
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: repeat(3, 1fr);
+        }
+
+        .gallery-container.grid-4 .gallery-item-wrap:nth-child(1) {
+            grid-row: span 3;
+        }
+
+        .gallery-container.grid-5 {
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-rows: repeat(2, 1fr);
+        }
+
+        .gallery-container.grid-5 .gallery-item-wrap:nth-child(1) {
+            grid-row: span 2;
+            grid-column: span 1;
+        }
+
+        /* Responsive Grid Collapse */
+        @media (max-width: 768px) {
+            .gallery-panel {
+                display: none !important;
+            }
+
+            .gallery-container.grid-3,
+            .gallery-container.grid-4,
+            .gallery-container.grid-5 {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto;
+            }
+
+            .gallery-container .gallery-item-wrap:nth-child(1) {
+                grid-column: span 2 !important;
+                grid-row: span 1 !important;
+                height: 300px;
+            }
+        }
+
+        .gallery-item {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: block;
+        }
+
+        /* HOW TO Overlay */
+        .how-to-overlay {
+            position: absolute;
+            bottom: 40px;
+            left: 30px;
+            right: 30px;
+            display: flex;
+            gap: 20px;
+            z-index: 10;
+        }
+
+        .how-to-step {
+            flex: 1;
+            padding: 30px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            min-height: 220px;
+        }
+
+        .step-num {
+            font-family: var(--font-logo);
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--primary-red);
+            margin-bottom: 4px;
+        }
+
+        .step-title {
+            font-weight: 800;
+            font-size: 16px;
+            margin-bottom: 0px;
+            color: #fff;
+        }
+
+        /* ========== RIGHT PANEL ========== */
+        .panel-right {
+            flex: 0 0 50%;
+            min-height: 100vh;
+            padding: 40px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--panel-dark);
+            position: relative;
+            overflow: visible;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: absolute;
+            top: 30px;
+            right: 80px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .theme-toggle:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+
+        .theme-icon {
+            width: 100%;
+            height: 100%;
+            display: none;
+            border-radius: 10px;
+        }
+
+        /* In Dark Mode (default), show the SUN icon to switch to light */
+        .theme-icon.sun {
+            display: block;
+        }
+
+        /* In Light Mode, show the MOON icon to switch to dark */
+        body.light-mode .theme-icon.sun {
+            display: none;
+        }
+
+        body.light-mode .theme-icon.moon {
+            display: block;
+        }
+
+        /* Light Mode Styles */
+        body.light-mode {
+            --bg-black: #FFFFFF;
+            --panel-dark: #FFFFFF;
+            --panel-border: #F0F0F0;
+            --text-gray: #7A7A7A;
+            --primary-red: #E53E3E;
+        }
+
+        body.light-mode .panel-right {
+            background-color: #FFFFFF;
+        }
+
+        body.light-mode .logo-dark {
+            display: none;
+        }
+
+        body.light-mode .logo-light {
+            display: block;
+        }
+
+        body.light-mode .tab {
+            border-color: #E5E5E5;
+            color: #5A5A5A;
+        }
+
+        body.light-mode .tab.active {
+            background-color: var(--primary-red);
+            color: #FFFFFF;
+            border-color: var(--primary-red);
+        }
+
+        body.light-mode .search-card {
+            background: #F9F9F9;
+            border-color: #F0F0F0;
+        }
+
+        body.light-mode .upload-btn {
+            background: #FFFFFF;
+        }
+
+        body.light-mode .drag-text {
+            color: #5A5A5A;
+        }
+
+        body.light-mode .file-hint {
+            color: #9A9A9A;
+        }
+
+        body.light-mode .footer-text {
+            color: #5A5A5A;
+        }
+
+        body.light-mode .footer-highlight {
+            color: var(--primary-red);
+        }
+
+        body.light-mode .theme-toggle {
+            color: #000000;
+        }
+
+        body.light-mode .launch-btn {
+            background: #F5F5F5;
+            color: #000000;
+            border-color: #E5E5E5;
+        }
+
+        /* Logo */
+        .logo {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .logo-img {
+            max-width: 280px;
+            height: auto;
+            display: none;
+        }
+
+        .logo-dark {
+            display: block;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            padding: 12px 28px;
+            border-radius: 100px;
+            background: transparent;
+            border: 1.5px solid #454545;
+            color: #CCCCCC;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            text-transform: uppercase;
+            scroll-snap-align: start;
+        }
+
+        .tab:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #FFFFFF;
+        }
+
+        .tab.active {
+            background: var(--primary-red);
+            border-color: var(--primary-red);
+            color: #FFFFFF;
+        }
+
+        .tabs-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 650px;
+            position: relative;
+        }
+
+        .tabs-scroll {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding-right: 50px;
+            -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+            mask-image: linear-gradient(to right, black 85%, transparent 100%);
+            scroll-snap-type: x mandatory;
+        }
+
+        .tabs-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-arrow {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background: none;
+            backdrop-filter: none;
+            border: none;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: none;
+        }
+
+        .tab-arrow:hover {
+            opacity: 0.7;
+            transform: translateY(-50%);
+        }
+
+        body.light-mode .tab-arrow {
+            background: none;
+            color: #000000;
+            border: none;
+            box-shadow: none;
+        }
+
+        body.light-mode .tab-arrow:hover {
+            background: none;
+            color: #000000;
+            opacity: 0.7;
+        }
+
+        /* Search Card */
+        .search-card {
+            width: 100%;
+            max-width: 650px;
+            background: #1A1A1A;
+            border-radius: 22px;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .upload-btn {
+            background: #FFFFFF;
+            color: #000000;
+            padding: 16px 36px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
+        }
+
+        .drag-text {
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 400;
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .file-hint {
+            font-size: 11px;
+            color: #D2D2D2;
+            margin-top: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        /* Assets Grid */
+        .assets-container {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 650px;
+            padding-bottom: 12px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+        }
+
+        .assets-container::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .assets-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .assets-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .assets-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .asset-thumb {
+            flex: 0 0 160px;
+            height: 100px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2;
+        }
+
+        .asset-thumb:hover {
+            transform: scale(1.05);
+        }
+
+        .asset-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .asset-remove {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 22px;
+            height: 22px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 5;
+        }
+
+        .asset-remove:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        /* Bottom Group (Assets + Footer) */
+        .bottom-section {
+            position: absolute;
+            bottom: 30px;
+            left: 80px;
+            right: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 20;
+            pointer-events: none;
+            /* Let clicks through to background if needed */
+        }
+
+        .bottom-section>* {
+            pointer-events: auto;
+            /* Re-enable for content */
+        }
+
+        /* Footer */
+        .footer-content {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .footer-text-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: #8A8A8A;
+            line-height: 1.4;
+        }
+
+        .footer-highlight {
+            color: var(--primary-red);
+            font-weight: 500;
+        }
+
+        .legal-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .legal-links a {
+            color: #FFFFFF;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            transition: color 0.2s;
+        }
+
+        .legal-links a:hover {
+            color: #FFFFFF;
+        }
+
+        body.light-mode .legal-links a {
+            color: #5A5A5A;
+        }
+
+        /* Launch Button */
+        .launch-btn {
+            width: 60px;
+            height: 60px;
+            background: #1A1A1A;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        body.light-mode .launch-btn {
+            background: #F5F5F5;
+        }
+
+        .launch-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .launch-btn img {
+            width: 36px;
+            height: auto;
+            display: none;
+        }
+
+        /* Toggle icon based on theme */
+        .launch-btn img.icon-dark {
+            display: block;
+        }
+
+        body.light-mode .launch-btn img.icon-dark {
+            display: none;
+        }
+
+        body.light-mode .launch-btn img.icon-light {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .panel-right {
+                padding: 40px 60px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .panel-right {
+                padding: 40px 40px;
+            }
+
+            .bottom-section {
+                left: 40px;
+                right: 40px;
+            }
+
+            .gallery-container.grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Tablet / Mobile Alignment */
+        @media (max-width: 1024px) {
+            body {
+                overflow: hidden;
+                height: 100vh;
+            }
+
+            .container {
+                flex-direction: column;
+                overflow: hidden;
+                height: 100vh;
+                width: 100%;
+            }
+
+            .gallery-panel {
+                display: none;
+            }
+
+            .panel-right {
+                flex: 1;
+                width: 100%;
+                height: 100vh;
+                padding: 40px 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                position: relative;
+            }
+
+            .middle-content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                margin-bottom: 0px;
+            }
+
+            .bottom-section {
+                position: absolute;
+                bottom: 30px;
+                left: 20px;
+                right: 20px;
+                width: calc(100% - 40px);
+                padding: 0;
+                margin-top: 0;
+            }
+
+            .footer-content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-end;
+                width: 100%;
+                text-align: left;
+            }
+
+            .footer-left {
+                align-items: flex-start;
+            }
+
+            .footer-text-row {
+                align-items: flex-start;
+            }
+
+            .legal-links {
+                justify-content: flex-start;
+                flex-wrap: nowrap;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo-img {
+                max-width: 240px;
+                width: 100%;
+            }
+
+            .tabs-container {
+                gap: 10px;
+                max-width: 100%;
+                justify-content: flex-start;
+            }
+
+            .tab {
+                padding: 10px 22px;
+            }
+
+            .search-card {
+                padding: 40px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .panel-right {
+                padding: 20px 20px;
+            }
+
+            .logo-img {
+                max-width: 280px;
+                /* Match poster size */
+            }
+
+            .tabs-container {
+                gap: 8px;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                padding: 0 5px;
+            }
+
+            .tab {
+                padding: 10px 18px;
+                font-size: 11px;
+            }
+
+            .search-card {
+                padding: 50px 20px;
+                border-radius: 30px;
+            }
+
+            .upload-btn {
+                padding: 16px 24px;
+                font-size: 14px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .footer-text {
+                font-size: 11px;
+                max-width: 180px;
+            }
+
+            .legal-links {
+                gap: 12px;
+            }
+
+            .legal-links li a {
+                font-size: 10px;
+            }
+
+            .launch-btn {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+
+<body class="loading">
+
+    <!-- Loader -->
+    <div id="loader-wrapper">
+        <div class="loader-content">
+            <svg class="progress-ring" width="300" height="300">
+                <circle class="progress-ring__circle" stroke-width="2" fill="transparent" r="140" cx="150" cy="150" />
+            </svg>
+            <div id="loader-counter">00</div>
+        </div>
+
+        <div id="loader-logo-phase">
+            <div class="logo-container">
+                <div class="logo-card">
+                    <img src="assets/animation.png" alt="" class="logo-bg-image">
+                </div>
+                <!-- Logo sits outside the card so overflow:hidden won't clip it -->
+                <img src="assets/LogoandIcons.png" alt="Superstyle" class="superstyle-logo-img">
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <!-- Left Panel with Fashion Image -->
+        <div class="gallery-panel">
+            <div id="galleryContainer" class="gallery-container">
+                <!-- Content injected via JS -->
+            </div>
+
+            <div id="howToOverlay" class="how-to-overlay">
+
+            </div>
+        </div>
+
+
+        <!-- Right Panel with UI -->
+        <div class="panel-right">
+            <!-- Theme Toggle -->
+            <div class="theme-toggle" onclick="toggleTheme()">
+                <img src="assets/moon.png" alt="Dark Mode" class="theme-icon moon">
+                <img src="assets/sun.png" alt="Light Mode" class="theme-icon sun">
+            </div>
+
+            <!-- Middle Section (Centering prioritized) -->
+            <div class="middle-content"
+                style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <!-- Logo -->
+                <div class="logo">
+                    <img src="assets/LogoandIcons.png" alt="Superstyle" class="logo-img logo-dark">
+                    <img src="assets/lightLogoandIcons.png" alt="Superstyle" class="logo-img logo-light">
+                </div>
+
+                <!-- Navigation Tabs -->
+                <div class="tabs-container">
+                    <div class="tabs-scroll" id="tabsScroll">
+                        <button class="tab" data-category="how-to">HOW TO</button>
+                        <button class="tab active" data-category="trending">TRENDING</button>
+                        <button class="tab" data-category="aw26">AW26</button>
+                        <button class="tab" data-category="ss27">SS27</button>
+                        <button class="tab" data-category="seen-on">SEEN ON</button>
+                        <button class="tab" data-category="street-style">STREET STYLE</button>
+                        <button class="tab" data-category="editorial">EDITORIAL</button>
+                        <button class="tab" data-category="new-in">NEW IN</button>
+                    </div>
+                    <button class="tab-arrow" id="scrollTabs">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Search Card -->
+                <div class="search-card">
+                    <button class="upload-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        SEARCH WITH IMAGE
+                    </button>
+                    <div class="drag-text">Change images or drag & drop it here</div>
+                    <div class="file-hint">JPG, JPEG, PNG AND WEBP. MAX 20 MB.</div>
+                </div>
+            </div>
+
+            <!-- Bottom Section (Anchored to base) -->
+            <div class="bottom-section">
+                <!-- Asset Thumbnails -->
+                <div id="assetsContainer" class="assets-container">
+                    <!-- User selected images will appear here -->
+                </div>
+
+                <!-- Footer -->
+                <div class="footer-content">
+                    <div class="footer-left">
+                        <div class="footer-text-row">
+                            <div class="footer-text">AI-powered image search for hundreds of stores and brands</div>
+                            <div class="footer-text footer-highlight">find exactly what you're looking for - or the
+                                perfect
+                                dupe.</div>
+                        </div>
+
+                        <ul class="legal-links">
+                            <li><a href="#">TERMS OF USE</a></li>
+                            <li><a href="#">PRIVACY</a></li>
+                            <li><a href="#">CONTACT</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="launch-btn">
+                        <img src="assets/footerarrow.png" alt="Launch" class="icon-dark">
+                        <img src="assets/footerarrowlight.png" alt="Launch" class="icon-light">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        }
+
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+        }
+
+        // Content data
+        const content = {
+            'how-to': {
+                im: ['https://plus.unsplash.com/premium_photo-1692340973564-12db94835fba?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D']
+            },
+            'trending': {
+                im: [
+                    'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1549575574-067586522f7b?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            'aw26': {
+                im: [
+                    'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1521335629791-ce4aec67dd15?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            'ss27': {
+                im: [
+                    'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80',
+                ]
+            },
+            'seen-on': {
+                im: [
+                    'https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            'street-style': {
+                im: [
+                    'https://images.unsplash.com/photo-1763750781876-d99c552c891c?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1549419017-f3c33306bc43?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1764698403664-56cdebd84067?auto=format&fit=crop&w=800&q=80',
+                ]
+            },
+            'editorial': {
+                im: [
+                    'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1550645612-83f5d59c8a11?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1495121605193-b116b5b9c5fe?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            'new-in': {
+                im: [
+                    'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80'
+                ]
+            }
+        };
+
+        const gallery = document.getElementById('galleryContainer');
+        const tabs = document.querySelectorAll('.tab');
+        const howToOverlay = document.getElementById('howToOverlay');
+
+        let currentCategory = 'trending';
+
+        function loadCategory(category, isClosing = false) {
+            const panel = document.querySelector('.gallery-panel');
+            const oldGallery = panel.querySelector('.gallery-container');
+            const howToOverlay = document.getElementById('howToOverlay');
+
+            // Determine direction based on tab index
+            const tabArray = Array.from(tabs);
+            const oldIdx = tabArray.findIndex(t => t.dataset.category === currentCategory);
+            const newIdx = tabArray.findIndex(t => t.dataset.category === category);
+            const direction = newIdx > oldIdx ? 'right' : 'left';
+
+            // Slide out old gallery
+            if (oldGallery) {
+                oldGallery.classList.add(direction === 'right' ? 'slide-left-out' : 'slide-right-out');
+                setTimeout(() => oldGallery.remove(), 600);
+            }
+
+            if (isClosing) {
+                howToOverlay.style.display = 'none';
+                currentCategory = null;
+                return;
+            }
+
+            const data = content[category];
+            if (!data) return;
+
+            // Create new gallery
+            const newElem = document.createElement('div');
+            newElem.className = `gallery-container grid-${Math.min(data.im.length, 5)} ${direction === 'right' ? 'slide-right-in' : 'slide-left-in'}`;
+
+            if (category === 'how-to') {
+                howToOverlay.style.display = 'flex';
+                // Use a real img so attachImageCursors() can attach TRY ME to it
+                const img = document.createElement('img');
+                img.src = data.im[0];
+                img.className = 'gallery-item';
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+                img.onerror = function () {
+                    this.src = 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80';
+                    this.onerror = null;
+                };
+                newElem.appendChild(img);
+            } else {
+                howToOverlay.style.display = 'none';
+                data.im.forEach(src => {
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.className = 'gallery-item';
+                    img.loading = 'lazy';
+                    img.onerror = function () {
+                        this.src = 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80';
+                        this.onerror = null;
+                    };
+                    newElem.appendChild(img);
+                });
+            }
+
+            panel.appendChild(newElem);
+
+            // Trigger slide in
+            setTimeout(() => {
+                newElem.classList.remove('slide-right-in', 'slide-left-in');
+                // Attach per-image cursors to newly loaded images
+                attachImageCursors();
+            }, 50);
+
+            currentCategory = category;
+        }
+
+        tabs.forEach(t => {
+            t.addEventListener('click', () => {
+                const category = t.dataset.category;
+                if (!category || t.classList.contains('active')) return;
+
+                tabs.forEach(btn => btn.classList.remove('active'));
+                t.classList.add('active');
+                loadCategory(category);
+            });
+        });
+
+        // Horizontal scroll for tabs via arrow
+        const scrollBtn = document.getElementById('scrollTabs');
+        const scrollContainer = document.getElementById('tabsScroll');
+
+        if (scrollBtn && scrollContainer) {
+            scrollBtn.addEventListener('click', () => {
+                scrollContainer.scrollBy({ left: 200, behavior: 'smooth' });
+
+                // Hide or show based on scroll position (optional refinement)
+                // If we reach the end, we could hide it or scroll back to start
+                if (scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 10) {
+                    scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
+                }
+            });
+        }
+
+        // Initialize
+        loadCategory('trending');
+        // Attach per-image cursors after initial load (brief delay for DOM)
+        setTimeout(attachImageCursors, 100);
+
+        // Asset removal
+        document.querySelectorAll('.asset-remove').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                this.closest('.asset-thumb').style.transform = 'scale(0)';
+                setTimeout(() => {
+                    this.closest('.asset-thumb').remove();
+                }, 200);
+            });
+        });
+
+        // Upload button file handling
+        document.querySelector('.upload-btn').addEventListener('click', function () {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.multiple = true;
+            input.onchange = function (e) {
+                handleFiles(e.target.files);
+            };
+            input.click();
+        });
+
+        // Drag and drop
+        const searchCard = document.querySelector('.search-card');
+
+        searchCard.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            searchCard.style.background = '#2A2A2A';
+        });
+
+        searchCard.addEventListener('dragleave', () => {
+            searchCard.style.background = '#1A1A1A';
+        });
+
+        searchCard.addEventListener('drop', (e) => {
+            e.preventDefault();
+            searchCard.style.background = '#1A1A1A';
+            handleFiles(e.dataTransfer.files);
+        });
+
+        // Per-image TRY ME cursor
+        // Wraps each .gallery-item in a .gallery-item-wrap and injects its own cursor
+        function attachImageCursors() {
+            document.querySelectorAll('.gallery-item').forEach(img => {
+                // Skip if already wrapped
+                if (img.parentElement.classList.contains('gallery-item-wrap')) return;
+
+                // Wrap the image
+                const wrap = document.createElement('div');
+                wrap.className = 'gallery-item-wrap';
+                img.parentNode.insertBefore(wrap, img);
+                wrap.appendChild(img);
+
+                // Create its own cursor
+                const cur = document.createElement('div');
+                cur.className = 'img-cursor';
+                cur.textContent = 'TRY ME';
+                wrap.appendChild(cur);
+
+                // Track mouse relative to this wrap
+                wrap.addEventListener('mousemove', (e) => {
+                    const rect = wrap.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    cur.style.left = x + 'px';
+                    cur.style.top = y + 'px';
+                });
+
+                wrap.addEventListener('mouseenter', () => cur.classList.add('active'));
+                wrap.addEventListener('mouseleave', () => cur.classList.remove('active'));
+            });
+        }
+
+        function handleFiles(files) {
+            const container = document.querySelector('.assets-container');
+
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const thumb = document.createElement('div');
+                        thumb.className = 'asset-thumb';
+                        thumb.innerHTML = `
+                            <img src="${e.target.result}" alt="Uploaded image">
+                            <div class="asset-remove">×</div>
+                        `;
+                        container.appendChild(thumb);
+
+                        // Add remove functionality
+                        thumb.querySelector('.asset-remove').addEventListener('click', function () {
+                            thumb.style.transform = 'scale(0)';
+                            setTimeout(() => thumb.remove(), 200);
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    </script>
+    <script>
+        /* Loader Script */
+        window.addEventListener('DOMContentLoaded', () => {
+            const wrapper = document.getElementById('loader-wrapper');
+            const counterEl = document.getElementById('loader-counter');
+            const circle = document.querySelector('.progress-ring__circle');
+            const logoPhase = document.getElementById('loader-logo-phase');
+
+            const radius = circle.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+
+            circle.style.strokeDasharray = `${circumference} ${circumference}`;
+            circle.style.strokeDashoffset = circumference;
+
+            function setProgress(percent) {
+                const offset = circumference - (percent / 100) * circumference;
+                circle.style.strokeDashoffset = offset;
+            }
+
+            // Milestones: 00 → 20 → 40 → 60 → 80 → 100
+            const milestones = [0, 20, 40, 60, 80, 100];
+            // Each step ~900ms → total ~4.5s for a slow, cinematic feel
+            const stepDelay = 900;
+
+            // Add smooth flip animation with blur + scale for premium feel
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes counterOut {
+                    0%   { transform: translateY(0)    scaleY(1)    blur(0px);   opacity: 1; }
+                    100% { transform: translateY(-80%) scaleY(0.6)               opacity: 0; }
+                }
+                @keyframes counterIn {
+                    0%   { transform: translateY(80%)  scaleY(0.6);              opacity: 0; }
+                    100% { transform: translateY(0)    scaleY(1)    blur(0px);   opacity: 1; }
+                }
+                @keyframes counterFlip {
+                    0%   { transform: translateY(0)     scaleY(1);   opacity: 1;  filter: blur(0px); }
+                    30%  { transform: translateY(-70%)  scaleY(0.5); opacity: 0;  filter: blur(6px); }
+                    35%  { transform: translateY(70%)   scaleY(0.5); opacity: 0;  filter: blur(6px); }
+                    100% { transform: translateY(0)     scaleY(1);   opacity: 1;  filter: blur(0px); }
+                }
+                .counter-flip {
+                    animation: counterFlip 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+                }
+            `;
+            document.head.appendChild(style);
+
+            function animateToMilestone(index) {
+                if (index >= milestones.length) return;
+
+                const value = milestones[index];
+
+                // Trigger flip animation
+                counterEl.classList.remove('counter-flip');
+                // Force reflow to restart animation
+                void counterEl.offsetWidth;
+                counterEl.classList.add('counter-flip');
+
+                counterEl.textContent = value.toString().padStart(2, '0');
+
+                // Smoothly animate progress ring to this milestone
+                const startProg = milestones[index - 1] ?? 0;
+                const endProg = value;
+                const progDuration = stepDelay * 0.95;
+                const progStart = performance.now();
+                function easeInOut(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+                function animateProgress(now) {
+                    const elapsed = now - progStart;
+                    const t = Math.min(elapsed / progDuration, 1);
+                    setProgress(startProg + (endProg - startProg) * easeInOut(t));
+                    if (t < 1) requestAnimationFrame(animateProgress);
+                }
+                requestAnimationFrame(animateProgress);
+
+                if (index < milestones.length - 1) {
+                    setTimeout(() => animateToMilestone(index + 1), stepDelay);
+                } else {
+                    // Reached 100 — show logo phase
+                    setTimeout(() => {
+                        logoPhase.classList.add('active');
+
+                        setTimeout(() => {
+                            wrapper.style.opacity = '0';
+                            wrapper.style.visibility = 'hidden';
+                            document.body.classList.remove('loading');
+
+                            setTimeout(() => {
+                                wrapper.remove();
+                            }, 800);
+                        }, 1800);
+                    }, 400);
+                }
+            }
+
+            // Start at 00, then begin stepping after a short pause
+            counterEl.textContent = '00';
+            setProgress(0);
+            setTimeout(() => animateToMilestone(1), 300);
+        });
+    </script>
+</body>
+
+</html>
