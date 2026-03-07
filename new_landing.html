@@ -10,6 +10,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Archivo+Black&display=swap"
         rel="stylesheet">
+    <link rel="icon" type="image/png" href="Newpdf/superstyle_FAVICON.png">
     <style>
         /* ========== LOADER ========== */
         #loader-wrapper {
@@ -170,7 +171,8 @@
 
         /* ========== LEFT PANEL ========== */
         .gallery-panel {
-            flex: 0 0 50%;
+            flex: 0 0 51.5%;
+            /* Adjusted for exact PDF proportion */
             height: 100vh;
             position: relative;
             background: #111;
@@ -183,12 +185,12 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
+            height: 100vh;
             display: grid;
             gap: 2px;
+            background: #000;
             transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.4s ease;
             cursor: none;
-            /* Hide default on gallery */
         }
 
         /* Custom Cursor */
@@ -260,15 +262,6 @@
             opacity: 0;
         }
 
-        /* Dynamic Grid Layouts */
-        /* Premium Gallery Grids */
-        .gallery-container {
-            display: grid;
-            gap: 2px;
-            width: 100%;
-            height: 100%;
-        }
-
         .gallery-container.grid-1 {
             grid-template-columns: 1fr;
         }
@@ -306,24 +299,64 @@
             grid-column: span 1;
         }
 
-        /* Responsive Grid Collapse */
-        @media (max-width: 768px) {
-            .gallery-panel {
-                display: none !important;
-            }
+        /* Specific Collage Layouts */
+        .grid-collage-trending {
+            grid-template-columns: 1.15fr 1fr;
+            /* Exact ratio from PDF */
+            grid-template-rows: 1fr 1fr;
+        }
 
-            .gallery-container.grid-3,
-            .gallery-container.grid-4,
-            .gallery-container.grid-5 {
-                grid-template-columns: 1fr 1fr;
-                grid-template-rows: auto;
-            }
+        .grid-collage-trending .gallery-item-wrap:nth-child(1) {
+            grid-row: span 2;
+        }
 
-            .gallery-container .gallery-item-wrap:nth-child(1) {
-                grid-column: span 2 !important;
-                grid-row: span 1 !important;
-                height: 300px;
-            }
+        .grid-stack-2 {
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+
+        .grid-full {
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+        }
+
+        /* Logo Overlays */
+        .logo-overlay {
+            position: absolute;
+            z-index: 15;
+            pointer-events: none;
+            max-width: 120px;
+            /* Increased from 60px */
+            max-height: 80px;
+            /* Increased from 40px */
+            object-fit: contain;
+        }
+
+        .logo-elle-decor {
+            max-width: 180px;
+            max-height: 100px;
+            top: 30px;
+            left: 30px;
+        }
+
+        .logo-top-right {
+            top: 20px;
+            right: 20px;
+        }
+
+        .logo-top-left {
+            top: 20px;
+            left: 20px;
+        }
+
+        .logo-bottom-left {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .logo-bottom-right {
+            bottom: 20px;
+            right: 20px;
         }
 
         .gallery-item {
@@ -371,7 +404,7 @@
 
         /* ========== RIGHT PANEL ========== */
         .panel-right {
-            flex: 0 0 50%;
+            flex: 0 0 48.5%;
             min-height: 100vh;
             padding: 40px 60px;
             display: flex;
@@ -438,11 +471,11 @@
         }
 
         body.light-mode .logo-dark {
-            display: none;
+            display: block;
         }
 
         body.light-mode .logo-light {
-            display: block;
+            display: none;
         }
 
         body.light-mode .tab {
@@ -611,10 +644,12 @@
         /* Search Card */
         .search-card {
             width: 100%;
-            max-width: 650px;
+            max-width: 580px;
+            /* More compact per PDF */
             background: #1A1A1A;
             border-radius: 22px;
-            padding: 50px 40px;
+            padding: 40px 30px;
+            /* Slightly reduced padding */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1031,7 +1066,7 @@
     </style>
 </head>
 
-<body class="loading">
+<body class="loading light-mode">
 
     <!-- Loader -->
     <div id="loader-wrapper">
@@ -1085,14 +1120,10 @@
                 <!-- Navigation Tabs -->
                 <div class="tabs-container">
                     <div class="tabs-scroll" id="tabsScroll">
-                        <button class="tab" data-category="how-to">HOW TO</button>
                         <button class="tab active" data-category="trending">TRENDING</button>
-                        <button class="tab" data-category="aw26">AW26</button>
-                        <button class="tab" data-category="ss27">SS27</button>
+                        <button class="tab" data-category="runway">RUNWAY</button>
                         <button class="tab" data-category="seen-on">SEEN ON</button>
-                        <button class="tab" data-category="street-style">STREET STYLE</button>
-                        <button class="tab" data-category="editorial">EDITORIAL</button>
-                        <button class="tab" data-category="new-in">NEW IN</button>
+                        <button class="tab" data-category="home">HOME</button>
                     </div>
                     <button class="tab-arrow" id="scrollTabs">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -1165,59 +1196,32 @@
 
         // Content data
         const content = {
-            'how-to': {
-                im: ['https://plus.unsplash.com/premium_photo-1692340973564-12db94835fba?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D']
-            },
             'trending': {
-                im: [
-                    'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1549575574-067586522f7b?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80'
+                layout: 'grid-collage-trending',
+                items: [
+                    { src: 'Newpdf/TRENDING/rebeccaferrazwyatt.jpg.webp', logo: 'Newpdf/TRENDING/instagram-circle-logo-icon-ig-app-transparent-background-premium-social-media-design-for-digital-download-free-png.png', logoPos: 'logo-top-right' },
+                    { src: 'Newpdf/TRENDING/GettyImages-2264024758-scaled.jpg', logo: 'Newpdf/TRENDING/wwd-logo-png_seeklogo-267807.png', logoPos: 'logo-top-right' },
+                    { src: 'Newpdf/TRENDING/timothée-chalamet-is-a-real-knicks-fan-he-went-to-indiana-v0-bzFsNjNnNHdhMTNmMXyHo3Y9LnyX_naryEToGstekjosQEQ4k8UGpqmYama8.png.webp', logo: 'Newpdf/TRENDING/tiktok-logo-tikok-icon-transparent-tikok-app-logo-free-png.png.webp', logoPos: 'logo-top-right' }
                 ]
             },
-            'aw26': {
-                im: [
-                    'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1521335629791-ce4aec67dd15?auto=format&fit=crop&w=800&q=80'
-                ]
-            },
-            'ss27': {
-                im: [
-                    'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80',
+            'runway': {
+                layout: 'grid-stack-2',
+                items: [
+                    { src: 'Newpdf/RUNWAY/RTW26TREND_Laird-2.png', logo: 'Newpdf/RUNWAY/VOGUE_revista_-_logo.png', logoPos: 'logo-bottom-left' },
+                    { src: 'Newpdf/RUNWAY/37b45c28661ad7057c2620525768ddfa.jpeg', logo: 'Newpdf/RUNWAY/cropped-ipmg-client-logo-gq1.png.webp', logoPos: 'logo-top-left' }
                 ]
             },
             'seen-on': {
-                im: [
-                    'https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=800&q=80'
+                layout: 'grid-stack-2',
+                items: [
+                    { src: 'Newpdf/SEEN ON/WUTHERING HEIGHTS.png', logo: null, logoPos: null },
+                    { src: 'Newpdf/SEEN ON/BRIDGERTON.png', logo: null, logoPos: null }
                 ]
             },
-            'street-style': {
-                im: [
-                    'https://images.unsplash.com/photo-1763750781876-d99c552c891c?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1549419017-f3c33306bc43?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1764698403664-56cdebd84067?auto=format&fit=crop&w=800&q=80',
-                ]
-            },
-            'editorial': {
-                im: [
-                    'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1550645612-83f5d59c8a11?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1495121605193-b116b5b9c5fe?auto=format&fit=crop&w=800&q=80'
-                ]
-            },
-            'new-in': {
-                im: [
-                    'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80'
+            'home': {
+                layout: 'grid-full',
+                items: [
+                    { src: 'Newpdf/HOME/0732c44b-1bdc-4296-bd8c-4a982c292060.jpg.avif', logo: 'Newpdf/HOME/elle-decor-logo-png_seeklogo-355065.png', logoPos: 'logo-elle-decor' }
                 ]
             }
         };
@@ -1228,16 +1232,17 @@
 
         let currentCategory = 'trending';
 
-        function loadCategory(category, isClosing = false) {
+        function loadCategory(category) {
             const panel = document.querySelector('.gallery-panel');
             const oldGallery = panel.querySelector('.gallery-container');
-            const howToOverlay = document.getElementById('howToOverlay');
+            const data = content[category];
+            if (!data) return;
 
             // Determine direction based on tab index
             const tabArray = Array.from(tabs);
             const oldIdx = tabArray.findIndex(t => t.dataset.category === currentCategory);
             const newIdx = tabArray.findIndex(t => t.dataset.category === category);
-            const direction = newIdx > oldIdx ? 'right' : 'left';
+            const direction = (oldIdx === -1 || newIdx > oldIdx) ? 'right' : 'left';
 
             // Slide out old gallery
             if (oldGallery) {
@@ -1245,54 +1250,40 @@
                 setTimeout(() => oldGallery.remove(), 600);
             }
 
-            if (isClosing) {
-                howToOverlay.style.display = 'none';
-                currentCategory = null;
-                return;
-            }
-
-            const data = content[category];
-            if (!data) return;
-
             // Create new gallery
             const newElem = document.createElement('div');
-            newElem.className = `gallery-container grid-${Math.min(data.im.length, 5)} ${direction === 'right' ? 'slide-right-in' : 'slide-left-in'}`;
+            newElem.className = `gallery-container ${data.layout} ${direction === 'right' ? 'slide-right-in' : 'slide-left-in'}`;
 
-            if (category === 'how-to') {
-                howToOverlay.style.display = 'flex';
-                // Use a real img so attachImageCursors() can attach TRY ME to it
+            data.items.forEach(item => {
+                const wrap = document.createElement('div');
+                wrap.className = 'gallery-item-wrap';
+
                 const img = document.createElement('img');
-                img.src = data.im[0];
+                img.src = item.src;
                 img.className = 'gallery-item';
-                img.style.width = '100%';
-                img.style.height = '100%';
-                img.style.objectFit = 'cover';
+                img.loading = 'lazy';
                 img.onerror = function () {
                     this.src = 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80';
                     this.onerror = null;
                 };
-                newElem.appendChild(img);
-            } else {
-                howToOverlay.style.display = 'none';
-                data.im.forEach(src => {
-                    const img = document.createElement('img');
-                    img.src = src;
-                    img.className = 'gallery-item';
-                    img.loading = 'lazy';
-                    img.onerror = function () {
-                        this.src = 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80';
-                        this.onerror = null;
-                    };
-                    newElem.appendChild(img);
-                });
-            }
+                wrap.appendChild(img);
+
+                // Add logo overlay if exists
+                if (item.logo) {
+                    const logoImg = document.createElement('img');
+                    logoImg.src = item.logo;
+                    logoImg.className = `logo-overlay ${item.logoPos}`;
+                    wrap.appendChild(logoImg);
+                }
+
+                newElem.appendChild(wrap);
+            });
 
             panel.appendChild(newElem);
 
             // Trigger slide in
             setTimeout(() => {
                 newElem.classList.remove('slide-right-in', 'slide-left-in');
-                // Attach per-image cursors to newly loaded images
                 attachImageCursors();
             }, 50);
 
