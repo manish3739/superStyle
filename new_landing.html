@@ -333,15 +333,22 @@
         }
 
         .logo-elle-decor {
-            max-width: 180px;
-            max-height: 100px;
-            top: 30px;
-            left: 30px;
+            max-width: 200px;
+            max-height: 150px;
+            top: 10px;
+            left: 20px;
         }
 
         .logo-top-right {
-            top: 20px;
+            top: -10px;
             right: 20px;
+        }
+
+        .logo-tiktok {
+            max-width: 35px;
+            max-height: 35px;
+            top: 15px;
+            right: 15px;
         }
 
         .logo-top-left {
@@ -562,7 +569,8 @@
             transition: all 0.3s;
             white-space: nowrap;
             text-transform: uppercase;
-            scroll-snap-align: start;
+            flex: 1;
+            max-width: 140px;
         }
 
         .tab:hover {
@@ -579,24 +587,18 @@
         .tabs-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
             margin-bottom: 30px;
             width: 100%;
-            max-width: 650px;
+            max-width: 100%;
             position: relative;
         }
 
         .tabs-scroll {
             display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            padding-right: 50px;
-            -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
-            mask-image: linear-gradient(to right, black 85%, transparent 100%);
-            scroll-snap-type: x mandatory;
+            gap: 12px;
+            width: 100%;
+            justify-content: center;
         }
 
         .tabs-scroll::-webkit-scrollbar {
@@ -1125,12 +1127,6 @@
                         <button class="tab" data-category="seen-on">SEEN ON</button>
                         <button class="tab" data-category="home">HOME</button>
                     </div>
-                    <button class="tab-arrow" id="scrollTabs">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="9 18 15 12 9 6"></polyline>
-                        </svg>
-                    </button>
                 </div>
 
                 <!-- Search Card -->
@@ -1201,7 +1197,7 @@
                 items: [
                     { src: 'Newpdf/TRENDING/rebeccaferrazwyatt.jpg.webp', logo: 'Newpdf/TRENDING/instagram-circle-logo-icon-ig-app-transparent-background-premium-social-media-design-for-digital-download-free-png.png', logoPos: 'logo-top-right' },
                     { src: 'Newpdf/TRENDING/GettyImages-2264024758-scaled.jpg', logo: 'Newpdf/TRENDING/wwd-logo-png_seeklogo-267807.png', logoPos: 'logo-top-right' },
-                    { src: 'Newpdf/TRENDING/timothée-chalamet-is-a-real-knicks-fan-he-went-to-indiana-v0-bzFsNjNnNHdhMTNmMXyHo3Y9LnyX_naryEToGstekjosQEQ4k8UGpqmYama8.png.webp', logo: 'Newpdf/TRENDING/tik-tok.png', logoPos: 'logo-top-right' }
+                    { src: 'Newpdf/TRENDING/timothée-chalamet-is-a-real-knicks-fan-he-went-to-indiana-v0-bzFsNjNnNHdhMTNmMXyHo3Y9LnyX_naryEToGstekjosQEQ4k8UGpqmYama8.png.webp', logo: 'Newpdf/TRENDING/tik-tok.png', logoPos: 'logo-tiktok' }
                 ]
             },
             'runway': {
