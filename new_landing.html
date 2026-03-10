@@ -531,6 +531,27 @@
             border-color: #E5E5E5;
         }
 
+        body.light-mode .meta-filename {
+            color: #000000;
+        }
+
+        body.light-mode .meta-details {
+            color: #666666;
+        }
+
+        body.light-mode .process-progress-container {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-mode .process-close {
+            background: rgba(0, 0, 0, 0.05);
+            color: #000000;
+        }
+
+        body.light-mode .process-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
         /* Logo */
         .logo {
             margin-bottom: 30px;
@@ -1186,8 +1207,7 @@
         .process-progress-bar {
             height: 100%;
             width: 0%;
-            background: #ff3b3b;
-            box-shadow: 0 0 10px rgba(255, 59, 59, 0.5);
+            background: #E53E3E;
             transition: width 0.1s linear;
         }
 
@@ -1894,6 +1914,9 @@
         }
 
         function startSearchFlow(file, imgData) {
+            // Close any existing overlay first (to prevent modal-on-modal)
+            closeSearchFlow();
+
             // Setup Processing state
             document.getElementById('processThumb').src = imgData;
             document.getElementById('processFilename').textContent = file.name;
@@ -2060,7 +2083,6 @@
 
         function closeSearchFlow() {
             searchFlowOverlay.classList.remove('active');
-            processCard.classList.remove('active');
             cropCard.classList.remove('active');
         }
     </script>
