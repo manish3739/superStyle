@@ -1065,6 +1065,286 @@
                 height: 50px;
             }
         }
+
+        /* ========== SEARCH FLOW OVERLAY ========== */
+        .search-flow-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .search-flow-overlay.active {
+            display: flex;
+        }
+
+        /* Processing Card */
+        .process-card {
+            background: #111;
+            width: 380px;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .search-card-state {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .search-card-state.active {
+            display: flex;
+        }
+
+        .process-card-inner {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .meta-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            position: relative;
+        }
+
+        .meta-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #222;
+        }
+
+        .meta-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .meta-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .meta-filename {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .meta-details {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .process-close {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+
+        .process-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .process-progress-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .process-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #ff3b3b;
+            box-shadow: 0 0 10px rgba(255, 59, 59, 0.5);
+            transition: width 0.1s linear;
+        }
+
+        /* Crop Card */
+        .crop-card {
+            background: #111;
+            width: 420px;
+            padding: 24px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        .crop-card.active {
+            display: flex;
+        }
+
+        .crop-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .crop-image-area {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .crop-image-area img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .crop-box {
+            position: absolute;
+            border: 1.5px dashed rgba(255, 255, 255, 0.7);
+            top: 15%;
+            left: 15%;
+            width: 70%;
+            height: 70%;
+            box-sizing: border-box;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4);
+            pointer-events: none;
+        }
+
+        .crop-handle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: auto;
+            border: 2px solid #333;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .ch-tl {
+            top: -4px;
+            left: -4px;
+            cursor: nw-resize;
+        }
+
+        .ch-tr {
+            top: -4px;
+            right: -4px;
+            cursor: ne-resize;
+        }
+
+        .ch-bl {
+            bottom: -4px;
+            left: -4px;
+            cursor: sw-resize;
+        }
+
+        .ch-br {
+            bottom: -4px;
+            right: -4px;
+            cursor: se-resize;
+        }
+
+        .ch-tm {
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: n-resize;
+        }
+
+        .ch-bm {
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: s-resize;
+        }
+
+        .ch-ml {
+            left: -4px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: w-resize;
+        }
+
+        .ch-mr {
+            right: -4px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: e-resize;
+        }
+
+        .crop-btn {
+            width: 100%;
+            padding: 16px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .crop-btn.searching {
+            background: var(--accent-green);
+            color: #fff;
+        }
+
+        .change-image-link {
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: underline;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        .change-image-link:hover {
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -1130,28 +1410,45 @@
                 </div>
 
                 <!-- Search Card -->
-                <div class="search-card">
-                    <button class="upload-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                            <polyline points="21 15 16 10 5 21"></polyline>
-                        </svg>
-                        SEARCH WITH IMAGE
-                    </button>
-                    <div class="drag-text">Change images or drag & drop it here</div>
-                    <div class="file-hint">JPG, JPEG, PNG AND WEBP. MAX 20 MB.</div>
+                <div class="search-card" id="mainSearchCard">
+                    <!-- Default State -->
+                    <div id="searchDefaultState" class="search-card-state active">
+                        <button class="upload-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                            SEARCH WITH IMAGE
+                        </button>
+                        <div class="drag-text">Change images or drag & drop it here</div>
+                        <div class="file-hint">JPG, JPEG, PNG AND WEBP. MAX 20 MB.</div>
+                    </div>
+
+                    <!-- Processing State -->
+                    <div id="searchProcessState" class="search-card-state">
+                        <div class="process-card-inner">
+                            <div class="meta-info">
+                                <div class="meta-thumb">
+                                    <img id="processThumb" src="" alt="thumb">
+                                </div>
+                                <div class="meta-text">
+                                    <div id="processFilename" class="meta-filename">image.webp</div>
+                                    <div id="processMeta" class="meta-details">webp • 487 KB • 1s</div>
+                                </div>
+                                <button class="process-close" onclick="resetSearchCard()">×</button>
+                            </div>
+                            <div class="process-progress-container">
+                                <div id="processProgressBar" class="process-progress-bar"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Bottom Section (Anchored to base) -->
             <div class="bottom-section">
-                <!-- Asset Thumbnails -->
-                <div id="assetsContainer" class="assets-container">
-                    <!-- User selected images will appear here -->
-                </div>
-
                 <!-- Footer -->
                 <div class="footer-content">
                     <div class="footer-left">
@@ -1360,25 +1657,20 @@
         });
 
         // Per-image TRY ME cursor
-        // Wraps each .gallery-item in a .gallery-item-wrap and injects its own cursor
         function attachImageCursors() {
             document.querySelectorAll('.gallery-item').forEach(img => {
-                // Skip if already wrapped
                 if (img.parentElement.classList.contains('gallery-item-wrap')) return;
 
-                // Wrap the image
                 const wrap = document.createElement('div');
                 wrap.className = 'gallery-item-wrap';
                 img.parentNode.insertBefore(wrap, img);
                 wrap.appendChild(img);
 
-                // Create its own cursor
                 const cur = document.createElement('div');
                 cur.className = 'img-cursor';
                 cur.textContent = 'TRY ME';
                 wrap.appendChild(cur);
 
-                // Track mouse relative to this wrap
                 wrap.addEventListener('mousemove', (e) => {
                     const rect = wrap.getBoundingClientRect();
                     const x = e.clientX - rect.left;
@@ -1389,33 +1681,19 @@
 
                 wrap.addEventListener('mouseenter', () => cur.classList.add('active'));
                 wrap.addEventListener('mouseleave', () => cur.classList.remove('active'));
+
+                wrap.addEventListener('click', () => {
+                    const src = img.src;
+                    const mockFile = { name: 'gallery_image.jpg', size: 512000 };
+                    startSearchFlow(mockFile, src);
+                });
             });
         }
 
         function handleFiles(files) {
-            const container = document.querySelector('.assets-container');
-
-            Array.from(files).forEach(file => {
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        const thumb = document.createElement('div');
-                        thumb.className = 'asset-thumb';
-                        thumb.innerHTML = `
-                            <img src="${e.target.result}" alt="Uploaded image">
-                            <div class="asset-remove">×</div>
-                        `;
-                        container.appendChild(thumb);
-
-                        // Add remove functionality
-                        thumb.querySelector('.asset-remove').addEventListener('click', function () {
-                            thumb.style.transform = 'scale(0)';
-                            setTimeout(() => thumb.remove(), 200);
-                        });
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
+            if (files && files[0]) {
+                handleSearchFile(files[0]);
+            }
         }
     </script>
     <script>
@@ -1539,6 +1817,252 @@
             setProgress(0);
             setTimeout(() => animateToMilestone(1), 300);
         });
+    </script>
+
+    <!-- Search Flow Overlay (Now mostly for Cropping) -->
+    <div id="searchFlowOverlay" class="search-flow-overlay">
+        <!-- Cropping moved here in logic if needed, but let's keep it centered -->
+
+        <!-- State 2: Cropping -->
+        <div id="cropCard" class="crop-card">
+            <button class="crop-close" onclick="closeSearchFlow()">×</button>
+            <div class="crop-image-area">
+                <img id="cropImage" src="" alt="crop">
+                <div class="crop-box">
+                    <div class="crop-handle ch-tl"></div>
+                    <div class="crop-handle ch-tr"></div>
+                    <div class="crop-handle ch-bl"></div>
+                    <div class="crop-handle ch-br"></div>
+                    <div class="crop-handle ch-tm"></div>
+                    <div class="crop-handle ch-bm"></div>
+                    <div class="crop-handle ch-ml"></div>
+                    <div class="crop-handle ch-mr"></div>
+                </div>
+            </div>
+            <button id="searchNowBtn" class="crop-btn">
+                <svg id="searchIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.3-4.3" />
+                </svg>
+                <svg id="checkIcon" style="display:none" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+                <span id="searchBtnText">Search Now</span>
+            </button>
+            <div class="change-image-link" onclick="triggerFileUpload()">Change image</div>
+        </div>
+    </div>
+
+    <input type="file" id="mainFileInput" accept="image/*" style="display:none">
+
+    <script>
+        /* Search Flow Script */
+        const mainFileInput = document.getElementById('mainFileInput');
+        const searchFlowOverlay = document.getElementById('searchFlowOverlay');
+        const cropCard = document.getElementById('cropCard');
+        const searchNowBtn = document.getElementById('searchNowBtn');
+        const searchDefaultState = document.getElementById('searchDefaultState');
+        const searchProcessState = document.getElementById('searchProcessState');
+
+        function triggerFileUpload() {
+            mainFileInput.click();
+        }
+
+        // Hook into the search button in the content area
+        document.addEventListener('click', function (e) {
+            if (e.target.closest('.upload-btn') || e.target.closest('.launch-btn')) {
+                e.preventDefault();
+                triggerFileUpload();
+            }
+        });
+
+        mainFileInput.addEventListener('change', function (e) {
+            if (e.target.files && e.target.files[0]) {
+                handleSearchFile(e.target.files[0]);
+            }
+        });
+
+        function handleSearchFile(file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const imgData = e.target.result;
+                startSearchFlow(file, imgData);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function startSearchFlow(file, imgData) {
+            // Setup Processing state
+            document.getElementById('processThumb').src = imgData;
+            document.getElementById('processFilename').textContent = file.name;
+            const sizeKB = Math.round(file.size / 1024);
+            const ext = file.name.split('.').pop().toLowerCase();
+            document.getElementById('processMeta').textContent = `${ext} • ${sizeKB} KB • 1s`;
+
+            // Transition main search card
+            searchDefaultState.classList.remove('active');
+            searchProcessState.classList.add('active');
+
+            // Reset cropper position
+            const cropBox = document.querySelector('.crop-box');
+            cropBox.style.top = '15%';
+            cropBox.style.left = '15%';
+            cropBox.style.width = '70%';
+            cropBox.style.height = '70%';
+
+            // Animate Progress Bar
+            const bar = document.getElementById('processProgressBar');
+            bar.style.width = '0%';
+
+            setTimeout(() => {
+                bar.style.transition = 'width 1.2s cubic-bezier(0.4, 0, 0.2, 1)';
+                bar.style.width = '100%';
+
+                setTimeout(() => {
+                    transitionToCrop(imgData);
+                }, 1400);
+            }, 100);
+        }
+
+        function transitionToCrop(imgData) {
+            // Open full-screen overlay for cropping
+            searchFlowOverlay.classList.add('active');
+            cropCard.classList.add('active');
+            document.getElementById('cropImage').src = imgData;
+
+            // Reset button state
+            searchNowBtn.classList.remove('searching');
+            document.getElementById('searchIcon').style.display = 'block';
+            document.getElementById('checkIcon').style.display = 'none';
+            document.getElementById('searchBtnText').textContent = 'Search Now';
+            searchNowBtn.style.background = '#fff';
+            searchNowBtn.style.color = '#000';
+
+            initCropper();
+        }
+
+        function resetSearchCard() {
+            searchProcessState.classList.remove('active');
+            searchDefaultState.classList.add('active');
+            closeSearchFlow();
+        }
+
+        // ========== FUNCTIONAL CROPPER LOGIC ==========
+        function initCropper() {
+            const cropBox = document.querySelector('.crop-box');
+            const cropArea = document.querySelector('.crop-image-area');
+            const handles = document.querySelectorAll('.crop-handle');
+
+            let isDragging = false;
+            let isResizing = false;
+            let activeHandle = null;
+            let startX, startY, startTop, startLeft, startWidth, startHeight;
+
+            // Handle Dragging
+            cropBox.style.pointerEvents = 'auto';
+            cropBox.style.cursor = 'move';
+
+            cropBox.onmousedown = (e) => {
+                if (e.target.classList.contains('crop-handle')) return;
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                startTop = cropBox.offsetTop;
+                startLeft = cropBox.offsetLeft;
+                e.preventDefault();
+            };
+
+            // Handle Resizing
+            handles.forEach(handle => {
+                handle.onmousedown = (e) => {
+                    isResizing = true;
+                    activeHandle = handle;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    startTop = cropBox.offsetTop;
+                    startLeft = cropBox.offsetLeft;
+                    startWidth = cropBox.offsetWidth;
+                    startHeight = cropBox.offsetHeight;
+                    e.stopPropagation();
+                    e.preventDefault();
+                };
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    let dx = e.clientX - startX;
+                    let dy = e.clientY - startY;
+
+                    let newLeft = startLeft + dx;
+                    let newTop = startTop + dy;
+
+                    // Bounds check
+                    newLeft = Math.max(0, Math.min(newLeft, cropArea.offsetWidth - cropBox.offsetWidth));
+                    newTop = Math.max(0, Math.min(newTop, cropArea.offsetHeight - cropBox.offsetHeight));
+
+                    cropBox.style.left = newLeft + 'px';
+                    cropBox.style.top = newTop + 'px';
+                }
+
+                if (isResizing) {
+                    let dx = e.clientX - startX;
+                    let dy = e.clientY - startY;
+
+                    const h = activeHandle.className;
+                    let nL = startLeft, nT = startTop, nW = startWidth, nH = startHeight;
+
+                    if (h.includes('tr')) { nT += dy; nH -= dy; nW += dx; }
+                    else if (h.includes('tl')) { nT += dy; nH -= dy; nL += dx; nW -= dx; }
+                    else if (h.includes('br')) { nW += dx; nH += dy; }
+                    else if (h.includes('bl')) { nL += dx; nW -= dx; nH += dy; }
+                    else if (h.includes('tm')) { nT += dy; nH -= dy; }
+                    else if (h.includes('bm')) { nH += dy; }
+                    else if (h.includes('ml')) { nL += dx; nW -= dx; }
+                    else if (h.includes('mr')) { nW += dx; }
+
+                    // Bounds & Min size
+                    if (nW > 40 && nH > 40) {
+                        // Max bounds
+                        if (nL < 0) { nW += nL; nL = 0; }
+                        if (nT < 0) { nH += nT; nT = 0; }
+                        if (nL + nW > cropArea.offsetWidth) nW = cropArea.offsetWidth - nL;
+                        if (nT + nH > cropArea.offsetHeight) nH = cropArea.offsetHeight - nT;
+
+                        cropBox.style.left = nL + 'px';
+                        cropBox.style.top = nT + 'px';
+                        cropBox.style.width = nW + 'px';
+                        cropBox.style.height = nH + 'px';
+                    }
+                }
+            });
+
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+                isResizing = false;
+                activeHandle = null;
+            });
+        }
+
+        searchNowBtn.addEventListener('click', function () {
+            searchNowBtn.classList.add('searching');
+            document.getElementById('searchIcon').style.display = 'none';
+            document.getElementById('checkIcon').style.display = 'block';
+            document.getElementById('searchBtnText').textContent = 'Search Now';
+            searchNowBtn.style.background = '#4CAF50';
+            searchNowBtn.style.color = '#fff';
+
+            setTimeout(() => {
+                window.location.href = 'new_results.html';
+            }, 800);
+        });
+
+        function closeSearchFlow() {
+            searchFlowOverlay.classList.remove('active');
+            processCard.classList.remove('active');
+            cropCard.classList.remove('active');
+        }
     </script>
 </body>
 
