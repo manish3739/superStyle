@@ -2081,6 +2081,8 @@
         }
 
         searchNowBtn.addEventListener('click', function () {
+            saveCroppedImage();
+
             searchNowBtn.classList.add('searching');
             document.getElementById('searchIcon').style.display = 'none';
             document.getElementById('checkIcon').style.display = 'block';
@@ -2092,6 +2094,61 @@
                 window.location.href = 'new_results.html';
             }, 800);
         });
+
+        function saveCroppedImage() {
+            const img = document.getElementById('cropImage');
+            const cropBox = document.querySelector('.crop-box');
+            const cropArea = document.querySelector('.crop-image-area');
+
+            if (!img || !cropBox || !cropArea) return;
+
+            // Calculate rendered image dimensions (contain)
+            const cw = cropArea.offsetWidth;
+            const ch = cropArea.offsetHeight;
+            const iw = img.naturalWidth;
+            const ih = img.naturalHeight;
+            const aspect = iw / ih;
+
+            let rw, rh, rl, rt;
+            if (iw / ih > cw / ch) {
+                rw = cw;
+                rh = cw / aspect;
+                rl = 0;
+                rt = (ch - rh) / 2;
+            } else {
+                rh = ch;
+                rw = ch * aspect;
+                rt = 0;
+                rl = (cw - rw) / 2;
+            }
+
+            // Crop box in pixels
+            const bx = cropBox.offsetLeft;
+            const by = cropBox.offsetTop;
+            const bw = cropBox.offsetWidth;
+            const bh = cropBox.offsetHeight;
+
+            // Project to natural pixels
+            const sx = (bx - rl) * (iw / rw);
+            const sy = (by - rt) * (ih / rh);
+            const sw = bw * (iw / rw);
+            const sh = bh * (ih / rh);
+
+            const canvas = document.createElement('canvas');
+            canvas.width = bw;
+            canvas.height = bh;
+            const ctx = canvas.getContext('2d');
+
+            ctx.drawImage(img, sx, sy, sw, sh, 0, 0, bw, bh);
+
+            try {
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+                localStorage.setItem('superstyle_search_image', dataUrl);
+            } catch (e) {
+                console.error("Save failed", e);
+                localStorage.setItem('superstyle_search_image', img.src);
+            }
+        }
 
         function closeSearchFlow() {
             searchFlowOverlay.classList.remove('active');

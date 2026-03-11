@@ -13,13 +13,13 @@
     <link rel="icon" type="image/png" href="Newpdf/superstyle_FAVICON.png">
     <style>
         :root {
-            --bg-black: #050505;
-            --panel-bg: #0a0a0a;
+            --bg-black: #000000;
+            --panel-bg: #0C0C0C;
             --card-bg: #111111;
             --text-white: #ffffff;
-            --text-gray: #888888;
-            --accent-red: #ff3b3b;
-            --accent-green: #52cc52;
+            --text-gray: #8A8A8E;
+            --accent-red: #E53E3E;
+            --accent-green: #34C759;
             --font-main: 'Inter', sans-serif;
             --font-logo: 'Archivo Black', sans-serif;
         }
@@ -51,18 +51,35 @@
         }
 
         .nav-logo {
-            font-family: var(--font-logo);
-            font-size: 32px;
-            text-transform: lowercase;
-            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
             text-decoration: none;
-            color: var(--text-white);
+        }
+
+        .logo-img {
+            height: 32px;
+            width: auto;
+            display: none;
+        }
+
+        .logo-dark {
+            display: block;
+        }
+
+        body.light-mode .logo-dark {
+            display: none;
+        }
+
+        body.light-mode .logo-light {
+            display: block;
         }
 
         .nav-links {
             display: flex;
             align-items: center;
             gap: 32px;
+            margin-left: auto;
+            margin-right: 48px;
         }
 
         .nav-links a {
@@ -81,25 +98,26 @@
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
         }
 
         .nav-icon-btn {
-            background: rgba(255, 255, 255, 0.1);
+            background: #1A1A1A;
             border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             color: var(--text-white);
-            transition: background 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .nav-icon-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: #252525;
+            transform: scale(1.05);
         }
 
         /* ========== MAIN LAYOUT ========== */
@@ -113,36 +131,39 @@
 
         /* ========== SIDEBAR ========== */
         .sidebar {
-            width: 200px;
+            width: 220px;
             flex-shrink: 0;
             position: sticky;
             top: 100px;
-            height: calc(100vh - 120px);
+            height: fit-content;
         }
 
         .sidebar h3 {
-            font-size: 12px;
-            font-weight: 500;
+            font-size: 11px;
+            font-weight: 600;
             color: var(--text-gray);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.05em;
             margin-bottom: 24px;
         }
 
         .detected-list {
             display: flex;
-            flex-direction: column;
-            gap: 16px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 32px;
         }
 
         .detected-item {
-            width: 56px;
-            height: 56px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             overflow: hidden;
             border: 2px solid transparent;
             cursor: pointer;
-            transition: border-color 0.2s, transform 0.2s;
+            transition: all 0.2s;
+            opacity: 0.6;
         }
 
         .detected-item img {
@@ -153,10 +174,12 @@
 
         .detected-item.active {
             border-color: var(--accent-red);
+            opacity: 1;
+            transform: scale(1.1);
         }
 
         .detected-item:hover {
-            transform: scale(1.05);
+            opacity: 1;
         }
 
         /* ========== CONTENT AREA ========== */
@@ -166,8 +189,8 @@
 
         /* Result Image Card */
         .source-card {
-            background: var(--card-bg);
-            border-radius: 12px;
+            background: #111111;
+            border-radius: 16px;
             overflow: hidden;
             margin-bottom: 40px;
             display: flex;
@@ -177,7 +200,7 @@
         }
 
         .source-img-wrapper {
-            width: 240px;
+            width: 250px;
             height: 180px;
         }
 
@@ -190,39 +213,41 @@
         .source-actions {
             padding: 24px 32px;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            align-items: center;
             justify-content: center;
             gap: 16px;
         }
 
         .action-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: var(--text-white);
-            padding: 10px 24px;
+            height: 44px;
+            padding: 0 24px;
             border-radius: 10px;
             font-size: 14px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .action-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.4);
         }
 
         .new-search-btn {
-            margin-top: 10px;
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: var(--text-white);
             width: 100%;
-            padding: 14px;
-            border-radius: 10px;
+            height: 48px;
+            padding: 0 24px;
+            border-radius: 24px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
@@ -234,7 +259,8 @@
         }
 
         .new-search-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #fff;
         }
 
         /* Shop Section */
@@ -294,11 +320,12 @@
 
         .product-img-container {
             position: relative;
+            width: 100%;
             aspect-ratio: 1 / 1.1;
             background: #151515;
             border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .product-img-container img {
@@ -309,52 +336,48 @@
 
         .tag-very-similar {
             position: absolute;
-            top: 12px;
-            left: 12px;
+            top: 10px;
+            left: 10px;
             background: var(--accent-green);
-            color: #000;
-            padding: 4px 8px;
+            color: #fff;
+            padding: 4px 10px;
             border-radius: 6px;
             font-size: 11px;
-            font-weight: 700;
-            text-transform: capitalize;
+            font-weight: 600;
         }
 
         .heart-btn {
             position: absolute;
-            bottom: 12px;
-            right: 12px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             color: white;
-            backdrop-filter: blur(4px);
             transition: all 0.2s;
         }
 
-        .heart-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .heart-btn svg {
+            filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
         }
 
         .heart-btn.active {
             color: var(--accent-red);
-            border-color: var(--accent-red);
         }
 
         .product-brand-tag {
             display: inline-block;
-            background: #1a1a1a;
+            background: #1A1A1A;
             color: var(--text-gray);
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
             margin-bottom: 8px;
             text-transform: lowercase;
         }
@@ -519,10 +542,118 @@
                 width: 100%;
                 height: 200px;
             }
+        }
 
-            .product-grid {
-                grid-template-columns: 1fr;
-            }
+        /* ========== LIGHT MODE ========== */
+        body.light-mode {
+            --bg-black: #FFFFFF;
+            --panel-bg: #F9F9FB;
+            --card-bg: #F0F0F0;
+            --text-white: #000000;
+            --text-gray: #666666;
+            --accent-red: #E53E3E;
+        }
+
+        body.light-mode .nav-logo,
+        body.light-mode .nav-links a,
+        body.light-mode .nav-icon-btn,
+        body.light-mode .sidebar h3,
+        body.light-mode .product-price,
+        body.light-mode .product-name,
+        body.light-mode .price-val {
+            color: #000000;
+        }
+
+        body.light-mode .nav-icon-btn {
+            background: #F0F0F0;
+            color: #000000;
+        }
+
+        body.light-mode .source-card {
+            background: #F7F7F7;
+            border-color: #E5E5E5;
+        }
+
+        body.light-mode .action-btn {
+            border-color: #D1D1D6;
+            color: #000000;
+        }
+
+        body.light-mode .new-search-btn {
+            border-color: #D1D1D6;
+            color: #000000;
+        }
+
+        body.light-mode .product-img-container {
+            background: #F2F2F7;
+        }
+
+        body.light-mode .product-brand-tag {
+            background: #E5E5EA;
+            color: #666666;
+        }
+
+        body.light-mode .control-btn {
+            color: #000000;
+        }
+
+        body.light-mode .more-btn {
+            border-color: #D1D1D6;
+            color: #000000;
+        }
+
+        body.light-mode .footer {
+            border-top-color: #E5E5E5;
+        }
+
+        body.light-mode .footer-links a {
+            color: #333333;
+        }
+
+        body.light-mode .launch-btn {
+            background: #F2F2F7;
+        }
+
+        /* Theme Toggle Sync */
+        .theme-toggle-btn {
+            background: #1A1A1A;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .theme-toggle-btn:hover {
+            background: #252525;
+            transform: scale(1.05);
+        }
+
+        .theme-icon {
+            width: 20px;
+            height: 20px;
+            display: none;
+        }
+
+        .theme-icon.sun {
+            display: block;
+        }
+
+        body.light-mode .theme-icon.sun {
+            display: none;
+        }
+
+        body.light-mode .theme-icon.moon {
+            display: block;
+        }
+
+        body.light-mode .theme-toggle-btn {
+            background: #F0F0F0;
         }
     </style>
 </head>
@@ -530,33 +661,60 @@
 <body>
 
     <nav class="navbar">
-        <a href="new_landing.html" class="nav-logo">superstyle</a>
+        <a href="new_landing.html" class="nav-logo">
+            <img src="landing_page_assets/LogoandIcons.png" alt="Superstyle" class="logo-img logo-dark">
+            <img src="landing_page_assets/lightLogoandIcons.png" alt="Superstyle" class="logo-img logo-light">
+        </a>
         <div class="nav-links">
-            <a href="#">Home</a>
-            <a href="#">Favorites</a>
-            <a href="#">Recent</a>
+            <a href="new_landing.html">Home</a>
+            <a href="saved.html">Favorites</a>
+            <a href="recent.html">Recent</a>
         </div>
         <div class="nav-actions">
             <button class="nav-icon-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                     stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.3-4.3" />
                 </svg>
             </button>
-            <button class="nav-icon-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="5" />
-                    <path
-                        d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-                </svg>
-            </button>
+            <div class="theme-toggle-btn" onclick="toggleTheme()">
+                <img src="landing_page_assets/sun.png" alt="Light Mode" class="theme-icon sun">
+                <img src="landing_page_assets/moon.png" alt="Dark Mode" class="theme-icon moon">
+            </div>
         </div>
     </nav>
 
     <div class="main-container">
         <aside class="sidebar">
+            <div class="source-card">
+                <div class="source-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?w=400&h=300&fit=crop"
+                        alt="base-image">
+                </div>
+                <div class="source-actions">
+                    <button class="action-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20h9" />
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                        </svg>
+                        Edit
+                    </button>
+                    <button class="action-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="18" cy="5" r="3" />
+                            <circle cx="6" cy="12" r="3" />
+                            <circle cx="18" cy="19" r="3" />
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                        </svg>
+                        Share
+                    </button>
+                </div>
+            </div>
+
             <h3>Multiple items detected</h3>
             <div class="detected-list">
                 <div class="detected-item active"><img
@@ -574,7 +732,7 @@
             </div>
 
             <button class="new-search-btn" onclick="window.location.href='new_landing.html'">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                     stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.3-4.3" />
@@ -584,55 +742,19 @@
         </aside>
 
         <main class="content-area">
-            <div class="source-card">
-                <div class="source-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?w=400&h=300&fit=crop"
-                        alt="base-image">
-                </div>
-                <div class="source-actions">
-                    <button class="action-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                        </svg>
-                        Edit
-                    </button>
-                    <button class="action-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="18" cy="5" r="3" />
-                            <circle cx="6" cy="12" r="3" />
-                            <circle cx="18" cy="19" r="3" />
-                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                        </svg>
-                        Share
-                    </button>
-                </div>
-            </div>
-
             <div class="shop-header">
                 <h2>Shop results</h2>
                 <div class="shop-controls">
                     <button class="control-btn">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10" />
-                            <path d="M12 8c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4Z" />
-                            <path d="M12 2v2" />
-                            <path d="M12 20v2" />
-                            <path d="m4.9 4.9 1.4 1.4" />
-                            <path d="m17.7 17.7 1.4 1.4" />
-                            <path d="M2 12h2" />
-                            <path d="M22 12h2" />
-                            <path d="m4.9 19.1 1.4-1.4" />
-                            <path d="m17.7 6.3 1.4-1.4" />
+                            <circle cx="12" cy="12" r="4" />
                         </svg>
                         EUR
                     </button>
                     <button class="control-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="4" y1="21" x2="4" y2="14" />
                             <line x1="4" y1="10" x2="4" y2="3" />
@@ -656,11 +778,12 @@
                         <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=500&fit=crop"
                             alt="product">
                         <div class="tag-very-similar">Very similar</div>
-                        <button class="heart-btn active"><svg width="18" height="18" viewBox="0 0 24 24"
-                                fill="currentColor">
+                        <button class="heart-btn active">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                 <path
                                     d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg></button>
+                            </svg>
+                        </button>
                     </div>
                     <div class="product-brand-tag">jakroo-us</div>
                     <div class="product-price"><span class="price-val">US$149.00</span></div>
@@ -672,11 +795,13 @@
                         <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&h=500&fit=crop"
                             alt="product">
                         <div class="tag-very-similar">Very similar</div>
-                        <button class="heart-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2">
+                        <button class="heart-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <path
                                     d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg></button>
+                            </svg>
+                        </button>
                     </div>
                     <div class="product-brand-tag">jakroo-us</div>
                     <div class="product-price"><span class="price-val">US$119.00</span></div>
@@ -688,11 +813,13 @@
                         <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400&h=500&fit=crop"
                             alt="product">
                         <div class="tag-very-similar">Very similar</div>
-                        <button class="heart-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2">
+                        <button class="heart-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <path
                                     d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg></button>
+                            </svg>
+                        </button>
                     </div>
                     <div class="product-brand-tag">arcteryx.com</div>
                     <div class="product-price"><span class="price-val">US$299.00</span></div>
@@ -704,11 +831,13 @@
                         <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=500&fit=crop"
                             alt="product">
                         <div class="tag-very-similar">Very similar</div>
-                        <button class="heart-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2">
+                        <button class="heart-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <path
                                     d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg></button>
+                            </svg>
+                        </button>
                     </div>
                     <div class="product-brand-tag">patagonia.com</div>
                     <div class="product-price"><span class="price-val">US$98.00</span></div>
@@ -720,11 +849,13 @@
                     <div class="product-img-container">
                         <img src="https://images.unsplash.com/photo-1520006403993-474cb10dbbc4?w=400&h=500&fit=crop"
                             alt="product">
-                        <button class="heart-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2">
+                        <button class="heart-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <path
                                     d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg></button>
+                            </svg>
+                        </button>
                     </div>
                     <div class="product-brand-tag">thenorthface.com</div>
                     <div class="product-price"><span class="price-val">US$199.00</span></div>
@@ -735,11 +866,13 @@
                     <div class="product-img-container">
                         <img src="https://images.unsplash.com/photo-1544441893-675973e31985?w=400&h=500&fit=crop"
                             alt="product">
-                        <button class="heart-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2">
+                        <button class="heart-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <path
                                     d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg></button>
+                            </svg>
+                        </button>
                     </div>
                     <div class="product-brand-tag">columbia.com</div>
                     <div class="product-price"><span class="price-val">US$129.00</span></div>
@@ -750,11 +883,13 @@
                     <div class="product-img-container">
                         <img src="https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=400&h=500&fit=crop"
                             alt="product">
-                        <button class="heart-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2">
+                        <button class="heart-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <path
                                     d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg></button>
+                            </svg>
+                        </button>
                     </div>
                     <div class="product-brand-tag">amazon.com</div>
                     <div class="product-price"><span class="price-val">US$75.00</span></div>
@@ -766,11 +901,13 @@
                         <img src="https://images.unsplash.com/photo-1548126032-079a0fb0099d?w=400&h=500&fit=crop"
                             alt="product">
                         <div class="tag-very-similar">Very similar</div>
-                        <button class="heart-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2">
+                        <button class="heart-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <path
                                     d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg></button>
+                            </svg>
+                        </button>
                     </div>
                     <div class="product-brand-tag">adidas.com</div>
                     <div class="product-price"><span class="price-val">US$225.00</span></div>
@@ -781,9 +918,10 @@
             <div class="more-results">
                 <button class="more-btn">
                     More results
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m7 13 5 5 5-5M7 6l5 5 5-5" />
+                        <path d="m6 9 6 6 6-6" />
+                        <path d="m6 15 6 6 6-6" />
                     </svg>
                 </button>
             </div>
@@ -793,7 +931,7 @@
     <footer class="footer">
         <div class="footer-bottom">
             <div class="footer-desc">
-                Al-powered image search for hundreds of stores and brands<br>
+                AI-powered image search for hundreds of stores and brands<br>
                 <strong>find exactly what you're looking for – or the perfect dupe.</strong>
             </div>
             <div class="footer-links">
@@ -802,15 +940,34 @@
                 <a href="#">Contact</a>
             </div>
             <div class="launch-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff3b3b" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M7 17L17 7M17 7H7M17 7V17" />
-                </svg>
+                <img src="landing_page_assets/footerarrow.png" alt="Launch" style="width: 20px; height: 20px;">
             </div>
         </div>
     </footer>
 
     <script>
+        // Theme toggle logic sync with landing page
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        }
+
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+        }
+
+        // Load searched image data
+        const searchImageData = localStorage.getItem('superstyle_search_image');
+        if (searchImageData) {
+            const sourceImg = document.querySelector('.source-img-wrapper img');
+            if (sourceImg) sourceImg.src = searchImageData;
+
+            // Optional: Update first detected item to match for demo consistency
+            const firstItemImg = document.querySelector('.detected-item.active img');
+            if (firstItemImg) firstItemImg.src = searchImageData;
+        }
+
         // Heart button toggle
         document.querySelectorAll('.heart-btn').forEach(btn => {
             btn.addEventListener('click', () => {
