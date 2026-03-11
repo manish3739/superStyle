@@ -1230,17 +1230,25 @@
 
         .crop-close {
             position: absolute;
-            top: 5px;
-            right: 20px;
+            top: 2px;
+            right: 5px;
             background: none;
             border: none;
-            color: #ffffff;
-            font-size: 30px;
             cursor: pointer;
             z-index: 10;
-            opacity: 0.7;
+            opacity: 1;
             transition: opacity 0.2s;
-            font-weight: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .crop-close-img {
+            width: 24px;
+            height: 24px;
+            /* Invert to make it white in dark mode (assuming original is black) */
+            filter: invert(1);
         }
 
 
@@ -1378,6 +1386,11 @@
 
         .change-image-link:hover {
             opacity: 1;
+        }
+
+        body.light-mode .crop-close-img {
+            filter: none;
+            /* Keep it black in light mode */
         }
     </style>
 </head>
@@ -1855,7 +1868,9 @@
 
         <!-- State 2: Cropping -->
         <div id="cropCard" class="crop-card">
-            <button class="crop-close" onclick="closeSearchFlow()">×</button>
+            <button class="crop-close" onclick="closeSearchFlow()">
+                <img src="landing_page_assets/cross.png" alt="Close" class="crop-close-img">
+            </button>
             <div class="crop-image-area">
                 <img id="cropImage" src="" alt="crop">
                 <div class="crop-box">
