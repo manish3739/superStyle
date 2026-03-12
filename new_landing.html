@@ -2172,6 +2172,9 @@
         function closeSearchFlow() {
             searchFlowOverlay.classList.remove('active');
             cropCard.classList.remove('active');
+            // Reset main card to default upload state
+            searchProcessState.classList.remove('active');
+            searchDefaultState.classList.add('active');
         }
     </script>
 </body>
