@@ -478,11 +478,11 @@
         }
 
         body.light-mode .logo-dark {
-            display: block;
+            display: none;
         }
 
         body.light-mode .logo-light {
-            display: none;
+            display: block;
         }
 
         body.light-mode .tab {
@@ -1697,12 +1697,16 @@
         // Per-image TRY ME cursor
         function attachImageCursors() {
             document.querySelectorAll('.gallery-item').forEach(img => {
-                if (img.parentElement.classList.contains('gallery-item-wrap')) return;
+                let wrap = img.parentElement;
+                
+                if (!wrap.classList.contains('gallery-item-wrap')) {
+                    wrap = document.createElement('div');
+                    wrap.className = 'gallery-item-wrap';
+                    img.parentNode.insertBefore(wrap, img);
+                    wrap.appendChild(img);
+                }
 
-                const wrap = document.createElement('div');
-                wrap.className = 'gallery-item-wrap';
-                img.parentNode.insertBefore(wrap, img);
-                wrap.appendChild(img);
+                if (wrap.querySelector('.img-cursor')) return;
 
                 const cur = document.createElement('div');
                 cur.className = 'img-cursor';
