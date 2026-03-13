@@ -1212,6 +1212,55 @@
             color: #000;
         }
 
+
+        /* ========== RANDOM SEARCH BUTTON ========== */
+        .random-search-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 580px;
+            padding: 14px 20px;
+            background: transparent;
+            border: 1.5px dashed rgba(255, 255, 255, 0.25);
+            border-radius: 14px;
+            color: #AAAAAA;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-top: 4px;
+        }
+
+        .random-search-btn:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            color: #FFFFFF;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .random-search-btn svg {
+            flex-shrink: 0;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .random-search-btn:hover svg {
+            opacity: 1;
+        }
+
+        body.light-mode .random-search-btn {
+            border-color: rgba(0, 0, 0, 0.2);
+            color: #555555;
+        }
+
+        body.light-mode .random-search-btn:hover {
+            border-color: rgba(0, 0, 0, 0.4);
+            color: #000000;
+            background: rgba(0, 0, 0, 0.04);
+        }
+
         /* ========== SEARCH FLOW OVERLAY ========== */
         .search-flow-overlay {
             position: fixed;
@@ -1638,7 +1687,7 @@
                         </ul>
                     </div>
 
-                    <div class="launch-btn">
+                    <div class="launch-btn" onclick="doRandomSearch()">
                         <img src="landing_page_assets/footerarrow.png" alt="Launch" class="icon-dark">
                         <img src="landing_page_assets/footerarrowlight.png" alt="Launch" class="icon-light">
                     </div>
@@ -2049,9 +2098,12 @@
 
         // Hook into the search button in the content area
         document.addEventListener('click', function (e) {
-            if (e.target.closest('.upload-btn') || e.target.closest('.launch-btn')) {
+            if (e.target.closest('.upload-btn')) {
                 e.preventDefault();
                 triggerFileUpload();
+            } else if (e.target.closest('.launch-btn')) {
+                e.preventDefault();
+                doRandomSearch();
             }
         });
 
@@ -2313,6 +2365,53 @@
 
         function goToLastSearch() {
             window.location.href = 'new_results.html';
+        }
+
+
+        // ========== RANDOM SEARCH ==========
+        // Add images to this array — path relative to this HTML file
+        const RANDOM_SEARCH_IMAGES = [
+            'Newpdf/TRENDING/rebeccaferrazwyatt.jpg.webp',
+            'Newpdf/TRENDING/GettyImages-2264024758-scaled.jpg',
+            'Newpdf/TRENDING/timothée-chalamet-is-a-real-knicks-fan-he-went-to-indiana-v0-bzFsNjNnNHdhMTNmMXyHo3Y9LnyX_naryEToGstekjosQEQ4k8UGpqmYama8.png.webp',
+            'Newpdf/RUNWAY/RTW26TREND_Laird-2.png',
+            'Newpdf/RUNWAY/37b45c28661ad7057c2620525768ddfa.jpeg',
+            'Newpdf/SEEN ON/WUTHERING HEIGHTS.png',
+            'Newpdf/SEEN ON/BRIDGERTON.png',
+            'Newpdf/HOME/0732c44b-1bdc-4296-bd8c-4a982c292060.jpg.avif',
+        ];
+
+        function doRandomSearch() {
+            const btn = document.getElementById('randomSearchBtn');
+            if (btn) {
+                btn.textContent = 'Loading...';
+                btn.disabled = true;
+            }
+
+            const src = RANDOM_SEARCH_IMAGES[Math.floor(Math.random() * RANDOM_SEARCH_IMAGES.length)];
+            // Load image via canvas to get dataURL (cross-origin-safe for local files)
+            const img = new Image();
+            img.onload = function () {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.naturalWidth || 800;
+                canvas.height = img.naturalHeight || 1000;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                try {
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                    localStorage.setItem('superstyle_search_image', dataUrl);
+                } catch (e) {
+                    // If tainted (CORS), store the path directly as fallback
+                    localStorage.setItem('superstyle_search_image', img.src);
+                }
+                window.location.href = 'new_results.html';
+            };
+            img.onerror = function () {
+                // fallback — store the path directly
+                localStorage.setItem('superstyle_search_image', img.src);
+                window.location.href = 'new_results.html';
+            };
+            img.src = src;
         }
 
         function closeSearchFlow() {

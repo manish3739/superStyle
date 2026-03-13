@@ -1447,7 +1447,7 @@
                     <a href="#">Contact</a>
                 </div>
             </div>
-            <div class="launch-btn">
+            <div class="launch-btn" onclick="doRandomSearch()">
                 <img src="landing_page_assets/footerarrow.png" alt="Launch" style="width: 20px; height: 20px;">
             </div>
         </div>
@@ -1701,17 +1701,55 @@
 
         // Initialize rendering
         document.addEventListener('DOMContentLoaded', () => {
-            renderProducts(productsData);
+            // Randomize products for 'random search' feel
+            const shuffledProducts = [...productsData].sort(() => Math.random() - 0.5);
+            renderProducts(shuffledProducts);
 
             // Add click listener to 'More results' button
             const moreBtn = document.querySelector('.more-btn');
             if (moreBtn) {
                 moreBtn.addEventListener('click', () => {
                     displayedCount += 12;
-                    renderProducts(productsData);
+                    renderProducts(shuffledProducts);
                 });
             }
         });
+
+        // ========== RANDOM SEARCH ==========
+        const RANDOM_SEARCH_IMAGES = [
+            'Newpdf/TRENDING/rebeccaferrazwyatt.jpg.webp',
+            'Newpdf/TRENDING/GettyImages-2264024758-scaled.jpg',
+            'Newpdf/TRENDING/timothée-chalamet-is-a-real-knicks-fan-he-went-to-indiana-v0-bzFsNjNnNHdhMTNmMXyHo3Y9LnyX_naryEToGstekjosQEQ4k8UGpqmYama8.png.webp',
+            'Newpdf/RUNWAY/RTW26TREND_Laird-2.png',
+            'Newpdf/RUNWAY/37b45c28661ad7057c2620525768ddfa.jpeg',
+            'Newpdf/SEEN ON/WUTHERING HEIGHTS.png',
+            'Newpdf/SEEN ON/BRIDGERTON.png',
+            'Newpdf/HOME/0732c44b-1bdc-4296-bd8c-4a982c292060.jpg.avif',
+        ];
+
+        function doRandomSearch() {
+            const src = RANDOM_SEARCH_IMAGES[Math.floor(Math.random() * RANDOM_SEARCH_IMAGES.length)];
+            const img = new Image();
+            img.onload = function () {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.naturalWidth || 800;
+                canvas.height = img.naturalHeight || 1000;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                try {
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                    localStorage.setItem('superstyle_search_image', dataUrl);
+                } catch (e) {
+                    localStorage.setItem('superstyle_search_image', img.src);
+                }
+                window.location.reload(); // Just reload with new image
+            };
+            img.onerror = function () {
+                localStorage.setItem('superstyle_search_image', img.src);
+                window.location.reload();
+            };
+            img.src = src;
+        }
 
         // Theme toggle logic sync with landing page
         function toggleTheme() {
