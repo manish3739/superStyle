@@ -954,6 +954,7 @@
         .crop-btn.searching {
             background: #34C759;
             color: #fff;
+            border: none;
         }
 
         .change-image-link {
@@ -997,6 +998,10 @@
             border: 2px solid #000000;
         }
 
+        body.light-mode .crop-btn.searching {
+            border: none;
+        }
+
         body.light-mode .crop-btn:hover {
             background: #000000;
         }
@@ -1011,6 +1016,281 @@
 
         body.light-mode .search-flow-overlay {
             background: rgba(255, 255, 255, 0.5);
+        }
+
+        /* ========== POPUP DRAWER ========== */
+        .popup-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 8000;
+            display: none;
+            backdrop-filter: blur(4px);
+        }
+
+        .popup-backdrop.active {
+            display: block;
+        }
+
+        .popup-panel {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 380px;
+            height: 100vh;
+            background: #111111;
+            z-index: 8001;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -8px 0 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .popup-panel.active {
+            right: 0;
+        }
+
+        .popup-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 20px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
+        }
+
+        .popup-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .popup-close {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #fff;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .popup-close:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .popup-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .popup-body::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .popup-body::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 4px;
+        }
+
+        /* Recent search item */
+        .recent-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 10px;
+            transition: background 0.2s;
+        }
+
+        .recent-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .recent-thumb {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #222;
+        }
+
+        .recent-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .recent-info {
+            flex: 1;
+        }
+
+        .recent-time {
+            font-size: 11px;
+            color: #7A7A7A;
+            margin-bottom: 4px;
+        }
+
+        .recent-search-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .recent-search-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Favorites item */
+        .fav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 10px;
+            transition: background 0.2s;
+        }
+
+        .fav-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .fav-thumb {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #222;
+        }
+
+        .fav-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .fav-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .fav-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+
+        .fav-price {
+            font-size: 13px;
+            color: #7A7A7A;
+        }
+
+        .fav-remove {
+            background: transparent;
+            border: none;
+            color: #E53E3E;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+            flex-shrink: 0;
+            transition: opacity 0.2s;
+        }
+
+        .fav-remove:hover {
+            opacity: 0.7;
+        }
+
+        /* Empty state */
+        .popup-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            height: 200px;
+            opacity: 0.5;
+            font-size: 14px;
+            color: #7A7A7A;
+        }
+
+        .popup-empty svg {
+            opacity: 0.4;
+        }
+
+        /* Light mode overrides */
+        body.light-mode .popup-panel {
+            background: #FFFFFF;
+            box-shadow: -8px 0 40px rgba(0, 0, 0, 0.15);
+        }
+
+        body.light-mode .popup-title {
+            color: #000;
+        }
+
+        body.light-mode .popup-close {
+            background: rgba(0, 0, 0, 0.06);
+            color: #000;
+        }
+
+        body.light-mode .popup-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .popup-header {
+            border-color: #E5E5E5;
+        }
+
+        body.light-mode .recent-item,
+        body.light-mode .fav-item {
+            background: #F5F5F5;
+        }
+
+        body.light-mode .recent-item:hover,
+        body.light-mode .fav-item:hover {
+            background: #EBEBEB;
+        }
+
+        body.light-mode .recent-thumb,
+        body.light-mode .fav-thumb {
+            background: #E0E0E0;
+        }
+
+        body.light-mode .fav-name,
+        body.light-mode .recent-search-btn {
+            color: #000;
+        }
+
+        body.light-mode .recent-search-btn {
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+
+        body.light-mode .recent-search-btn:hover {
+            background: rgba(0, 0, 0, 0.06);
         }
     </style>
 </head>
@@ -1035,7 +1315,7 @@
                 </a>
 
                 <!-- Search -->
-                <button class="nav-icon-btn" onclick="alert('Search clicked')">
+                <button class="nav-icon-btn" id="navSearchBtn" title="New Search">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8" />
@@ -1044,22 +1324,22 @@
                 </button>
 
                 <!-- Favorites / Saved -->
-                <a href="saved.html" class="nav-icon-btn">
+                <button class="nav-icon-btn" id="navFavBtn" title="Favorites" onclick="openPopup('favorites')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path
                             d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                     </svg>
-                </a>
+                </button>
 
                 <!-- Recent -->
-                <a href="recent.html" class="nav-icon-btn">
+                <button class="nav-icon-btn" id="navRecentBtn" title="Recent Searches" onclick="openPopup('recent')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10" />
                         <polyline points="12 6 12 12 16 14" />
                     </svg>
-                </a>
+                </button>
 
                 <!-- Theme Toggle -->
                 <div class="theme-toggle-btn" onclick="toggleTheme()">
@@ -1078,7 +1358,7 @@
                         alt="base-image">
                 </div>
                 <div class="source-actions">
-                    <button class="action-btn">
+                    <button class="action-btn" id="editBtn" onclick="openEditCrop()">
                         <img src="landing_page_assets/crop.png" alt="Edit" class="edit-icon">
                         Edit
                     </button>
@@ -1398,13 +1678,22 @@
                 btn.onclick = () => {
                     btn.classList.toggle('active');
                     const svg = btn.querySelector('svg');
+                    const card = btn.closest('.product-card');
                     if (btn.classList.contains('active')) {
                         svg.setAttribute('fill', 'currentColor');
                         svg.setAttribute('stroke', 'none');
+                        // Save to favorites
+                        const name = card.querySelector('.product-name')?.textContent || '';
+                        const price = card.querySelector('.price-val')?.textContent || '';
+                        const image = card.querySelector('.product-img-container img')?.src || '';
+                        if (name) saveFavoriteToStorage({ name, price, image });
                     } else {
                         svg.setAttribute('fill', 'none');
                         svg.setAttribute('stroke', 'currentColor');
                         svg.setAttribute('stroke-width', '2');
+                        // Remove from favorites
+                        const name = card.querySelector('.product-name')?.textContent || '';
+                        if (name) removeFavoriteFromStorage(name);
                     }
                 };
             });
@@ -1457,6 +1746,44 @@
             });
         });
     </script>
+
+
+    <!-- Popup Backdrop -->
+    <div id="popupBackdrop" class="popup-backdrop" onclick="closePopup()"></div>
+
+    <!-- Favorites Popup -->
+    <div id="favoritesPopup" class="popup-panel">
+        <div class="popup-header">
+            <span class="popup-title">Favorites</span>
+            <button class="popup-close" onclick="closePopup()">&#x2715;</button>
+        </div>
+        <div class="popup-body" id="favoritesBody">
+            <div class="popup-empty">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+                <span>No favorites yet.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Searches Popup -->
+    <div id="recentPopup" class="popup-panel">
+        <div class="popup-header">
+            <span class="popup-title">Recent Searches</span>
+            <button class="popup-close" onclick="closePopup()">&#x2715;</button>
+        </div>
+        <div class="popup-body" id="recentBody">
+            <div class="popup-empty">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <span>No recent searches yet.</span>
+            </div>
+        </div>
+    </div>
 
     <!-- Search Flow Overlay -->
     <div id="searchFlowOverlay" class="search-flow-overlay">
@@ -1710,6 +2037,153 @@
             searchFlowOverlay.classList.remove('active');
             cropCard.classList.remove('active');
         }
+
+
+        // ========== POPUP SYSTEM ==========
+        let activePopupId = null;
+
+        function openPopup(type) {
+            closePopup();
+            if (type === 'favorites') {
+                renderFavoritesPopup();
+                activePopupId = 'favoritesPopup';
+            } else if (type === 'recent') {
+                renderRecentPopup();
+                activePopupId = 'recentPopup';
+            }
+            if (activePopupId) {
+                document.getElementById(activePopupId).classList.add('active');
+                document.getElementById('popupBackdrop').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closePopup() {
+            document.querySelectorAll('.popup-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('popupBackdrop').classList.remove('active');
+            document.body.style.overflow = '';
+            activePopupId = null;
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
+
+        // Wire Search nav icon
+        document.getElementById('navSearchBtn').addEventListener('click', () => triggerFileUpload());
+
+        // ========== EDIT BUTTON ==========
+        function openEditCrop() {
+            const img = localStorage.getItem('superstyle_search_image');
+            if (img) {
+                transitionToCrop(img);
+            } else {
+                triggerFileUpload();
+            }
+        }
+
+        // ========== RECENT SEARCHES ==========
+        const MAX_RECENT = 5;
+
+        function saveToRecent(imgData) {
+            let recents = [];
+            try { recents = JSON.parse(localStorage.getItem('superstyle_recent_searches') || '[]'); } catch (e) { }
+            // Avoid duplicates (same top-100 chars)
+            const key = imgData.substring(0, 100);
+            recents = recents.filter(r => (r.src || '').substring(0, 100) !== key);
+            recents.unshift({ src: imgData, timestamp: Date.now() });
+            if (recents.length > MAX_RECENT) recents.length = MAX_RECENT;
+            localStorage.setItem('superstyle_recent_searches', JSON.stringify(recents));
+        }
+
+        function timeAgo(ts) {
+            const diff = Math.floor((Date.now() - ts) / 1000);
+            if (diff < 60) return 'Just now';
+            if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+            if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+            return Math.floor(diff / 86400) + 'd ago';
+        }
+
+        function renderRecentPopup() {
+            const body = document.getElementById('recentBody');
+            let recents = [];
+            try { recents = JSON.parse(localStorage.getItem('superstyle_recent_searches') || '[]'); } catch (e) { }
+            if (!recents.length) {
+                body.innerHTML = '<div class="popup-empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>No recent searches yet.</span></div>';
+                return;
+            }
+            body.innerHTML = recents.map((r, i) => `
+                <div class="recent-item">
+                    <div class="recent-thumb"><img src="${r.src}" alt="search ${i + 1}"></div>
+                    <div class="recent-info">
+                        <div class="recent-time">${timeAgo(r.timestamp)}</div>
+                        <button class="recent-search-btn" onclick="searchAgainFromRecent(${i})">Search again</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function searchAgainFromRecent(index) {
+            let recents = [];
+            try { recents = JSON.parse(localStorage.getItem('superstyle_recent_searches') || '[]'); } catch (e) { }
+            if (recents[index]) {
+                localStorage.setItem('superstyle_search_image', recents[index].src);
+                closePopup();
+                window.location.reload();
+            }
+        }
+
+        // ========== FAVORITES ==========
+        function saveFavoriteToStorage(fav) {
+            let favs = [];
+            try { favs = JSON.parse(localStorage.getItem('superstyle_favorites') || '[]'); } catch (e) { }
+            const key = fav.name;
+            if (!favs.find(f => f.name === key)) {
+                favs.unshift(fav);
+                localStorage.setItem('superstyle_favorites', JSON.stringify(favs));
+            }
+        }
+
+        function removeFavoriteFromStorage(name) {
+            let favs = [];
+            try { favs = JSON.parse(localStorage.getItem('superstyle_favorites') || '[]'); } catch (e) { }
+            favs = favs.filter(f => f.name !== name);
+            localStorage.setItem('superstyle_favorites', JSON.stringify(favs));
+        }
+
+        function renderFavoritesPopup() {
+            const body = document.getElementById('favoritesBody');
+            let favs = [];
+            try { favs = JSON.parse(localStorage.getItem('superstyle_favorites') || '[]'); } catch (e) { }
+            if (!favs.length) {
+                body.innerHTML = '<div class="popup-empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>No favorites yet</span></div>';
+                return;
+            }
+            body.innerHTML = favs.map(f => `
+                <div class="fav-item">
+                    <div class="fav-thumb"><img src="${f.image}" alt="${f.name}"></div>
+                    <div class="fav-info">
+                        <div class="fav-name">${f.name}</div>
+                        <div class="fav-price">${f.price}</div>
+                    </div>
+                    <button class="fav-remove" onclick="removeFav('${f.name.replace(/'/g, "\\'")}', this)">&#x2715;</button>
+                </div>
+            `).join('');
+        }
+
+        function removeFav(name, btn) {
+            removeFavoriteFromStorage(name);
+            btn.closest('.fav-item').remove();
+            const body = document.getElementById('favoritesBody');
+            let favs = [];
+            try { favs = JSON.parse(localStorage.getItem('superstyle_favorites') || '[]'); } catch (e) { }
+            if (!favs.length) renderFavoritesPopup();
+        }
+
+        // ========== AUTO-SAVE CURRENT SEARCH TO RECENT ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            const img = localStorage.getItem('superstyle_search_image');
+            if (img) saveToRecent(img);
+        });
+
     </script>
 </body>
 
