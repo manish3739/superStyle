@@ -585,7 +585,8 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            color: #fff;
         }
 
         .launch-btn:hover {
@@ -654,7 +655,7 @@
             --card-bg: #F0F0F0;
             --text-white: #000000;
             --text-gray: #666666;
-            --accent-red: #E53E3E;
+            --accent-red: #680202;
         }
 
         body.light-mode .nav-logo,
@@ -734,6 +735,7 @@
 
         body.light-mode .launch-btn {
             background: #F2F2F7;
+            color: #680202;
         }
 
         /* Theme Toggle Sync */
@@ -1213,7 +1215,7 @@
         .fav-remove {
             background: transparent;
             border: none;
-            color: #E53E3E;
+            color: var(--accent-red);
             cursor: pointer;
             font-size: 18px;
             padding: 4px;
@@ -1448,7 +1450,10 @@
                 </div>
             </div>
             <div class="launch-btn" onclick="doRandomSearch()">
-                <img src="landing_page_assets/footerarrow.png" alt="Launch" style="width: 20px; height: 20px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
             </div>
         </div>
     </footer>

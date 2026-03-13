@@ -518,7 +518,7 @@
         }
 
         body.light-mode .footer-highlight {
-            color: var(--primary-red);
+            color: #680202;
         }
 
         body.light-mode .theme-toggle {
@@ -924,29 +924,21 @@
             cursor: pointer;
             transition: all 0.3s;
             flex-shrink: 0;
+            color: #fff;
         }
 
         body.light-mode .launch-btn {
             background: #F5F5F5;
+            color: #680202;
         }
 
         .launch-btn:hover {
             transform: scale(1.05);
         }
 
-        .launch-btn img {
-            width: 36px;
-            height: auto;
-            display: none;
-        }
-
-        /* Toggle icon based on theme */
-        .launch-btn img.icon-dark {
-            display: block;
-        }
-
-        body.light-mode .launch-btn img.icon-dark {
-            display: none;
+        .launch-btn svg {
+            width: 24px;
+            height: 24px;
         }
 
         body.light-mode .launch-btn img.icon-light {
@@ -1688,8 +1680,10 @@
                     </div>
 
                     <div class="launch-btn" onclick="doRandomSearch()">
-                        <img src="landing_page_assets/footerarrow.png" alt="Launch" class="icon-dark">
-                        <img src="landing_page_assets/footerarrowlight.png" alt="Launch" class="icon-light">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
                     </div>
                 </div>
             </div>
