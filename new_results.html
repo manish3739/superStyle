@@ -977,7 +977,40 @@
         }
 
         body.light-mode .crop-close-img {
-            filter: none;
+            filter: invert(1);
+            /* Invert white icon to black in light mode */
+        }
+
+        body.light-mode .crop-card {
+            background: #FFFFFF;
+            border: 1px solid #E5E5E5;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        body.light-mode .crop-image-area {
+            background: #F0F0F0;
+        }
+
+        body.light-mode .crop-btn {
+            background: #111111;
+            color: #FFFFFF;
+            border: 2px solid #000000;
+        }
+
+        body.light-mode .crop-btn:hover {
+            background: #000000;
+        }
+
+        body.light-mode .change-image-link {
+            color: #333333;
+        }
+
+        body.light-mode .meta-thumb {
+            background: #E0E0E0;
+        }
+
+        body.light-mode .search-flow-overlay {
+            background: rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
@@ -1124,8 +1157,9 @@
         <div class="footer-bottom">
             <div class="footer-left">
                 <div class="footer-desc">
-                    AI-powered image search for hundreds of stores and brands<br>
-                    <strong>find exactly what you're looking for – or the perfect dupe.</strong>
+                    AI-powered image search for hundreds of stores and brands <strong>find exactly what you're looking
+                        for – or the perfect dupe.</strong><br>
+
                 </div>
                 <div class="footer-links">
                     <a href="#">Terms of Use</a>
@@ -1310,7 +1344,8 @@
                 ]
             }
         ];        // Pagination State
-        let displayedCount = 8;
+        productsData.push(...productsData); // Duplicate items for more robust preview array
+        let displayedCount = 20;
 
         function renderProducts(data) {
             const grid = document.getElementById('productGrid');
@@ -1383,7 +1418,7 @@
             const moreBtn = document.querySelector('.more-btn');
             if (moreBtn) {
                 moreBtn.addEventListener('click', () => {
-                    displayedCount += 8;
+                    displayedCount += 12;
                     renderProducts(productsData);
                 });
             }

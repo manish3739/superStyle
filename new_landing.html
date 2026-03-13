@@ -552,6 +552,38 @@
             background: rgba(0, 0, 0, 0.1);
         }
 
+        body.light-mode .crop-card {
+            background: #FFFFFF;
+            border: 1px solid #E5E5E5;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        body.light-mode .crop-image-area {
+            background: #F0F0F0;
+        }
+
+        body.light-mode .crop-btn {
+            background: #111111;
+            color: #FFFFFF;
+            border: 2px solid #000000;
+        }
+
+        body.light-mode .crop-btn:hover {
+            background: #000;
+        }
+
+        body.light-mode .change-image-link {
+            color: #333333;
+        }
+
+        body.light-mode .meta-thumb {
+            background: #E0E0E0;
+        }
+
+        body.light-mode .search-flow-overlay {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
         /* Logo */
         .logo {
             margin-bottom: 30px;
@@ -1207,7 +1239,7 @@
         .process-progress-bar {
             height: 100%;
             width: 0%;
-            background: #E53E3E;
+            background: var(--primary-red);
             transition: width 0.1s linear;
         }
 
@@ -1388,8 +1420,8 @@
         }
 
         body.light-mode .crop-close-img {
-            filter: none;
-            /* Keep it black in light mode */
+            filter: invert(1);
+            /* Invert white icon to black in light mode */
         }
     </style>
 </head>
@@ -1676,18 +1708,20 @@
         // Drag and drop
         const searchCard = document.querySelector('.search-card');
 
+        const isLightMode = () => document.body.classList.contains('light-mode');
+
         searchCard.addEventListener('dragover', (e) => {
             e.preventDefault();
-            searchCard.style.background = '#2A2A2A';
+            searchCard.style.background = isLightMode() ? '#EDEDED' : '#2A2A2A';
         });
 
         searchCard.addEventListener('dragleave', () => {
-            searchCard.style.background = '#1A1A1A';
+            searchCard.style.background = isLightMode() ? '#F7F7F7' : '#1A1A1A';
         });
 
         searchCard.addEventListener('drop', (e) => {
             e.preventDefault();
-            searchCard.style.background = '#1A1A1A';
+            searchCard.style.background = isLightMode() ? '#F7F7F7' : '#1A1A1A';
             if (e.dataTransfer.files && e.dataTransfer.files[0]) {
                 handleSearchFile(e.dataTransfer.files[0]);
             }
@@ -1725,8 +1759,9 @@
 
                 wrap.addEventListener('click', () => {
                     const src = img.src;
-                    const mockFile = { name: 'gallery_image.jpg', size: 512000 };
-                    startSearchFlow(mockFile, src);
+                    // Skip crop — save image directly and jump to results
+                    localStorage.setItem('superstyle_search_image', src);
+                    window.location.href = 'new_results.html';
                 });
             });
         }
