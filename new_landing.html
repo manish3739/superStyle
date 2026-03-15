@@ -501,6 +501,10 @@
             border-color: #F0F0F0;
         }
 
+        body.light-mode .search-card.dragover {
+            background: #EDEDED;
+        }
+
         body.light-mode .upload-btn {
             background: #FFFFFF;
         }
@@ -714,6 +718,10 @@
             align-items: center;
             margin-bottom: 20px;
             transition: all 0.3s;
+        }
+
+        .search-card.dragover {
+            background: #2A2A2A;
         }
 
         .upload-btn {
@@ -1845,20 +1853,18 @@
         // Drag and drop
         const searchCard = document.querySelector('.search-card');
 
-        const isLightMode = () => document.body.classList.contains('light-mode');
-
         searchCard.addEventListener('dragover', (e) => {
             e.preventDefault();
-            searchCard.style.background = isLightMode() ? '#EDEDED' : '#2A2A2A';
+            searchCard.classList.add('dragover');
         });
 
         searchCard.addEventListener('dragleave', () => {
-            searchCard.style.background = isLightMode() ? '#F7F7F7' : '#1A1A1A';
+            searchCard.classList.remove('dragover');
         });
 
         searchCard.addEventListener('drop', (e) => {
             e.preventDefault();
-            searchCard.style.background = isLightMode() ? '#F7F7F7' : '#1A1A1A';
+            searchCard.classList.remove('dragover');
             if (e.dataTransfer.files && e.dataTransfer.files[0]) {
                 handleSearchFile(e.dataTransfer.files[0]);
             }
