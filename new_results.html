@@ -55,7 +55,7 @@
             width: 100%;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px 40px;
+            padding: 20px 50px;
         }
 
         .nav-logo {
@@ -140,7 +140,7 @@
             display: flex;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px 40px 80px;
+            padding: 20px 50px 80px;
             gap: 40px;
         }
 
@@ -530,8 +530,15 @@
         /* ========== FOOTER ========== */
         .footer {
             margin-top: 100px;
-            padding: 40px;
+            padding: 40px 0;
             border-top: 1px solid #2C2C2C;
+        }
+
+        .footer-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 50px;
+            width: 100%;
         }
 
         .footer-bottom {
@@ -1436,24 +1443,28 @@
     </div>
 
     <footer class="footer">
-        <div class="footer-bottom">
-            <div class="footer-left">
-                <div class="footer-desc">
-                    AI-powered image search for hundreds of stores and brands <strong>find exactly what you're looking
-                        for – or the perfect dupe.</strong><br>
+        <div class="footer-inner">
+            <div class="footer-bottom">
+                <div class="footer-left">
+                    <div class="footer-desc">
+                        AI-powered image search for hundreds of stores and brands <strong>find exactly what you're
+                            looking
+                            for – or the perfect dupe.</strong><br>
 
+                    </div>
+                    <div class="footer-links">
+                        <a href="#">Terms of Use</a>
+                        <a href="#">Privacy</a>
+                        <a href="#">Contact</a>
+                    </div>
                 </div>
-                <div class="footer-links">
-                    <a href="#">Terms of Use</a>
-                    <a href="#">Privacy</a>
-                    <a href="#">Contact</a>
+                <div class="launch-btn" onclick="doRandomSearch()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
                 </div>
-            </div>
-            <div class="launch-btn" onclick="doRandomSearch()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                </svg>
             </div>
         </div>
     </footer>
