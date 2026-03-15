@@ -443,6 +443,36 @@
             transform: scale(1.05);
         }
 
+        .back-results-btn {
+            position: absolute;
+            top: 30px;
+            left: 60px;
+            width: 44px;
+            height: 44px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 100;
+            background: #1A1A1A;
+            border-radius: 12px;
+            color: #680102;
+        }
+
+        .back-results-btn:hover {
+            transform: translateX(-3px);
+            background: #252525;
+        }
+
+        body.light-mode .back-results-btn {
+            background: #F5F5F5;
+        }
+
+        body.light-mode .back-results-btn:hover {
+            background: #EDEDED;
+        }
+
         .theme-icon {
             width: 100%;
             height: 100%;
@@ -1611,6 +1641,14 @@
                 <img src="landing_page_assets/sun.png" alt="Light Mode" class="theme-icon sun">
             </div>
 
+            <!-- Back to Results -->
+            <div id="backResultsBtn" class="back-results-btn" onclick="window.location.href='new_results.html'">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </div>
+
             <!-- Middle Section (Centering prioritized) -->
             <div class="middle-content"
                 style="display: flex; flex-direction: column; align-items: center; width: 100%;">
@@ -1914,6 +1952,12 @@
     <script>
         /* Loader Script */
         window.addEventListener('DOMContentLoaded', () => {
+            // Check for existing search to show "Back to Results"
+            const backBtn = document.getElementById('backResultsBtn');
+            if (backBtn && localStorage.getItem('superstyle_search_image')) {
+                backBtn.style.display = 'flex';
+            }
+
             const wrapper = document.getElementById('loader-wrapper');
             const counterEl = document.getElementById('loader-counter');
             const circle = document.querySelector('.progress-ring__circle');
