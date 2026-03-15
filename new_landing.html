@@ -1592,6 +1592,260 @@
             opacity: 1;
         }
 
+        /* ========== COOKIE BANNER ========== */
+        .cookie-banner {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 1300px;
+            background: #111111;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px 30px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10001;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            gap: 20px;
+        }
+
+        .cookie-banner.active {
+            display: flex;
+        }
+
+        .cookie-content {
+            font-size: 14px;
+            color: #A0A0A0;
+            line-height: 1.4;
+        }
+
+        .cookie-content a {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        .cookie-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+        .cookie-btn {
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .cookie-btn.accept {
+            background: #fff;
+            color: #000;
+        }
+
+        .cookie-btn.reject {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .cookie-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .privacy-choices {
+            font-size: 14px;
+            color: #A0A0A0;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        body.light-mode .cookie-banner {
+            background: #FFFFFF;
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .cookie-content,
+        body.light-mode .privacy-choices {
+            color: #555555;
+        }
+
+        body.light-mode .cookie-content a {
+            color: #000;
+        }
+
+        body.light-mode .cookie-btn.accept {
+            background: #000;
+            color: #fff;
+        }
+
+        body.light-mode .cookie-btn.reject {
+            background: #F1F1F1;
+            color: #000;
+        }
+
+        @media (max-width: 900px) {
+            .cookie-banner {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 25px;
+            }
+            .cookie-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        /* ========== POPUP DRAWER (Legal) ========== */
+        .popup-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 11000;
+            display: none;
+            backdrop-filter: blur(4px);
+        }
+
+        .popup-backdrop.active {
+            display: block;
+        }
+
+        .popup-panel {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 380px;
+            height: 100vh;
+            background: #111111;
+            z-index: 11001;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -8px 0 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .popup-panel.active {
+            right: 0;
+        }
+
+        .popup-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 20px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
+        }
+
+        .popup-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .popup-close {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #fff;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .popup-close:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .popup-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 20px;
+        }
+
+        /* Legal Modal Content Styles */
+        .legal-content-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            margin: 24px 0 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .legal-content-title:first-child {
+            margin-top: 0;
+        }
+
+        .legal-content-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #A0A0A0;
+            margin-bottom: 16px;
+        }
+
+        .legal-content-text strong {
+            color: #fff;
+        }
+
+        .legal-content-list {
+            padding-left: 20px;
+            margin-bottom: 16px;
+        }
+
+        .legal-content-list li {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #A0A0A0;
+            margin-bottom: 8px;
+        }
+
+        body.light-mode .popup-panel {
+            background: #FFFFFF;
+            box-shadow: -8px 0 40px rgba(0, 0, 0, 0.15);
+        }
+
+        body.light-mode .popup-title {
+            color: #000;
+        }
+
+        body.light-mode .popup-close {
+            background: rgba(0, 0, 0, 0.06);
+            color: #000;
+        }
+
+        body.light-mode .popup-header {
+            border-color: #E5E5E5;
+        }
+
+        body.light-mode .legal-content-title {
+            color: #000;
+        }
+
+        body.light-mode .legal-content-text,
+        body.light-mode .legal-content-list li {
+            color: #555555;
+        }
+
+        body.light-mode .legal-content-text strong {
+            color: #000;
+        }
+
         body.light-mode .crop-close-img {
             filter: invert(1);
             /* Invert white icon to black in light mode */
@@ -1719,8 +1973,8 @@
                         </div>
 
                         <ul class="legal-links">
-                            <li><a href="#">TERMS OF USE</a></li>
-                            <li><a href="#">PRIVACY</a></li>
+                            <li><a href="javascript:void(0)" onclick="openPopup('terms')">TERMS OF USE</a></li>
+                            <li><a href="javascript:void(0)" onclick="openPopup('privacy')">PRIVACY</a></li>
                             <li><a href="#">CONTACT</a></li>
                         </ul>
                     </div>
@@ -1734,6 +1988,141 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Cookie Banner -->
+    <div id="cookieBanner" class="cookie-banner">
+        <div class="cookie-content">
+            🍪 We use cookies to keep blabla free. By accepting, you support us and accept our <a href="javascript:void(0)" onclick="openPopup('terms')">Terms</a> and <a href="javascript:void(0)" onclick="openPopup('privacy')">Privacy</a>.
+        </div>
+        <div class="cookie-actions">
+            <button class="cookie-btn accept" onclick="acceptCookies()">Accept</button>
+            <button class="cookie-btn reject" onclick="closeCookieBanner()">Reject non-essential</button>
+            <a href="javascript:void(0)" onclick="openPopup('privacy')" class="privacy-choices">Your Privacy Choices ⚠️</a>
+        </div>
+    </div>
+
+    <!-- Popup Backdrop -->
+    <div id="popupBackdrop" class="popup-backdrop" onclick="closePopup()"></div>
+
+    <!-- Privacy Policy Popup -->
+    <div id="privacyPopup" class="popup-panel">
+        <div class="popup-header">
+            <span class="popup-title">Privacy Policy</span>
+            <button class="popup-close" onclick="closePopup()">&#x2715;</button>
+        </div>
+        <div class="popup-body">
+            <div class="legal-content-text" style="font-size: 12px; opacity: 0.6; margin-bottom: 24px;">Last Updated: 13.03.2026</div>
+            
+            <div class="legal-content-title">1. The TLDR</div>
+            <p class="legal-content-text">We don't have accounts. We don't want your name or email. Your uploaded images are processed temporarily and auto-deleted within 24 hours. We use cookies to make the site work. We see anonymous stats like "someone in London searched for red shoes." We don't sell your data. Period.</p>
+            
+            <div class="legal-content-title">2. What We Actually Collect</div>
+            <p class="legal-content-text"><strong>Images you upload:</strong> Processed for your search, deleted within 24 hours. We don't look at them, don't train AI on them, don't share them.</p>
+            <p class="legal-content-text"><strong>Technical stuff:</strong> IP address (temporary), browser type, pages visited. This is anonymized – we see trends, not you.</p>
+            <p class="legal-content-text"><strong>Our cookies:</strong> Session-only. They expire when you close your browser. No cross-site tracking.</p>
+            <p class="legal-content-text"><strong>Affiliate cookies:</strong> When you click a product link, the third-party site may set its own cookies. These have their own durations (typically 24 hours to 90 days) and are governed by their privacy policies, not ours.</p>
+            
+            <div class="legal-content-title">3. What We Definitely Don't Collect</div>
+            <p class="legal-content-text">No names. No emails. No passwords. No payment info. No location history. No search history tied to you.</p>
+            
+            <div class="legal-content-title">4. How We Use Your Data</div>
+            <ul class="legal-content-list">
+                <li>To provide the AI search (obviously)</li>
+                <li>To improve the site and count visitors</li>
+                <li>To block nasty stuff (see: Don't Be Gross rule)</li>
+                <li>To comply with Hong Kong law (PDPO)</li>
+            </ul>
+            
+            <div class="legal-content-title">5. Images: Your Stuff, Your Rights</div>
+            <p class="legal-content-text">You own your images. We just temporarily process them. They are automatically deleted within 24 hours. We don't sell them, share them, or keep them.</p>
+            
+            <div class="legal-content-title">6. Affiliate Links & Third Parties</div>
+            <p class="legal-content-text">Click a product, you leave superstyle. Their site, their rules. We're not responsible for them. Yes, we may earn a commission – that's how we exist.</p>
+            
+            <div class="legal-content-title">7. Data Sharing (Spoiler: We Don't)</div>
+            <p class="legal-content-text">We don't sell your data. Full stop. We share anonymized stuff with trusted helpers (hosting, analytics) who must protect it too. If the law (Hong Kong or otherwise) requires us to share something, we'll push back if it's unreasonable.</p>
+            
+            <div class="legal-content-title">8. How Long We Keep Stuff</div>
+            <p class="legal-content-text"><strong>Images:</strong> 24 hours</p>
+            <p class="legal-content-text"><strong>IP logs:</strong> Limited time, then deleted</p>
+            <p class="legal-content-text"><strong>Our Cookies:</strong> Until you close your browser</p>
+            <p class="legal-content-text"><strong>Analytics:</strong> Aggregated and anonymous forever</p>
+            
+            <div class="legal-content-title">9. Your Rights (Yes, You Have Them)</div>
+            <p class="legal-content-text">Under Hong Kong's PDPO, GDPR (if you're in Europe), or CCPA (if you're in California):</p>
+            <ul class="legal-content-list">
+                <li>You can ask what we hold (spoiler: not much that identifies you)</li>
+                <li>You can ask us to delete stuff (though we auto-delete most things)</li>
+            </ul>
+            <p class="legal-content-text"><strong>We don't sell data, so no opt-out needed for that.</strong></p>
+            <p class="legal-content-text">Email contact@superstyle.xyz anytime. We reply.</p>
+            
+            <div class="legal-content-title">10. Don't Be Gross</div>
+            <p class="legal-content-text">Our systems scan for illegal, violent, or NSFW content. If detected, we block you. We may keep limited data to prevent you from coming back and being gross again.</p>
+            
+            <div class="legal-content-title">11. Changes</div>
+            <p class="legal-content-text">If we update this, we'll post it here and update the date. Keep using superstyle = you're cool with the changes.</p>
+            
+            <div class="legal-content-title">Questions?</div>
+            <p class="legal-content-text">Email: contact@superstyle.xyz<br>Company: KRKL Tech Limited, Hong Kong SAR</p>
+        </div>
+    </div>
+
+    <!-- Terms of Use Popup -->
+    <div id="termsPopup" class="popup-panel">
+        <div class="popup-header">
+            <span class="popup-title">Terms of Use</span>
+            <button class="popup-close" onclick="closePopup()">&#x2715;</button>
+        </div>
+        <div class="popup-body">
+            <div class="legal-content-text" style="font-size: 12px; opacity: 0.6; margin-bottom: 24px;">Last Updated: 13.03.2026</div>
+            
+            <p class="legal-content-text">By using superstyle, you enter this agreement with us. If you aren't "cool with it," please close the tab.</p>
+
+            <div class="legal-content-title">1. The TLDR</div>
+            <p class="legal-content-text">We built an AI tool to help you find fashion and design stuff using images. superstyle is operated by KRKL Tech Limited ("we", "us", "our"), a company incorporated in the Hong Kong Special Administrative Region. We make money via affiliate links (meaning we get a small commission if you buy something). You are cool with that. We do not own any of the products or images you see.</p>
+            
+            <div class="legal-content-title">2. How We Eat</div>
+            <p class="legal-content-text">Clicking a product link takes you to a third-party site (like Amazon or a brand store). If you buy, we may earn a commission. We don't sell anything. We are just the referral. We aren't responsible for the stuff you buy, if it arrives, or if the third-party site breaks. That's between you and them.</p>
+            
+            <div class="legal-content-title">3. Who Owns the Pictures?</div>
+            <p class="legal-content-text"><strong>We don't.</strong> The images in our results belong to their owners. We slap a logo on them to show you exactly where they came from (source attribution). You own your searches. When you upload a pic to search, you guarantee you have the right to use it. By uploading, you simply grant us permission to host and analyze that image to perform the search for you.</p>
+            
+            <div class="legal-content-title">4. The "Don't Be Gross" Rule</div>
+            <p class="legal-content-text">Do not use this site for illegal, gross, or nasty stuff. This means:</p>
+            <ul class="legal-content-list">
+                <li>No violence, gore, or NSFW adult content.</li>
+                <li>No hate speech or harassment.</li>
+                <li>No uploading pics that steal someone else's privacy.</li>
+            </ul>
+            <p class="legal-content-text">We use automated systems to scan for content that breaks this rule. If our systems detect a violation, we will block your access immediately. No warnings. If you believe any content violates these Terms or your rights, contact us at contact@superstyle.xyz. We will review and take appropriate action, including removal, within a reasonable time.</p>
+            
+            <div class="legal-content-title">5. Data (Privacy Lite)</div>
+            <p class="legal-content-text">We don't want your name, email, or password. We don't have accounts. Cookies: We use session cookies to make the site work and count visits. Traffic: We see depersonalized data (like "someone in London searched for red shoes"). We don't know it's you specifically.</p>
+            
+            <div class="legal-content-title">6. The Legal Fine Print</div>
+            <p class="legal-content-text">THE SERVICE IS "AS IS." We are a search tool, not a guarantee. We do not promise the search results are perfect, the prices on third-party sites are accurate, or that the products are in stock. We are not liable if you lose money because a third-party product was bad, or if our site goes down for a minute. You use this site at your own risk. These Terms shall be governed by and construed in accordance with the laws of the Hong Kong Special Administrative Region. Any dispute arising out of or in connection with these Terms shall be subject to the non-exclusive jurisdiction of the courts of the Hong Kong Special Administrative Region.</p>
+            <p class="legal-content-text">Nothing in these Terms shall exclude or restrict any liability that cannot be excluded or restricted under Hong Kong law, including the Supply of Services (Implied Terms) Ordinance (Cap. 457). For European Union users: Nothing in these Terms limits your statutory rights as a consumer under EU law. If you are a consumer based in the EU, you may also bring proceedings in your country of residence.</p>
+            
+            <div class="legal-content-title">7. DMCA Compliance (Copyright Claims)</div>
+            <p class="legal-content-text">If you believe content on superstyle infringes your copyright, send notice to contact@superstyle.xyz with:</p>
+            <ul class="legal-content-list">
+                <li>Your physical or electronic signature</li>
+                <li>Identification of the copyrighted work</li>
+                <li>Identification of infringing material + URL</li>
+                <li>Your contact information</li>
+                <li>A statement of good faith belief</li>
+                <li>A statement that information is accurate, under penalty of perjury</li>
+            </ul>
+            <p class="legal-content-text">We will remove content upon valid notice. If the uploader submits a counter-notice, we may restore content after 10-14 business days unless you file a court action.</p>
+            
+            <div class="legal-content-title">8. Changes</div>
+            <p class="legal-content-text">We may update these Terms. If we make material changes, we will notify you by website banner.</p>
+            
+            <div class="legal-content-title">Questions?</div>
+            <p class="legal-content-text">Email: contact@superstyle.xyz<br>Company: KRKL Tech Limited, Hong Kong SAR</p>
         </div>
     </div>
 
@@ -2466,6 +2855,49 @@
             searchProcessState.classList.remove('active');
             searchDefaultState.classList.add('active');
         }
+
+        // Modal Logic
+        function openPopup(type) {
+            closePopup(); // Close any currently open popup
+            
+            let popupId = '';
+            if (type === 'privacy') popupId = 'privacyPopup';
+            else if (type === 'terms') popupId = 'termsPopup';
+            
+            const popup = document.getElementById(popupId);
+            const backdrop = document.getElementById('popupBackdrop');
+            
+            if (popup && backdrop) {
+                popup.classList.add('active');
+                backdrop.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closePopup() {
+            document.querySelectorAll('.popup-panel').forEach(p => p.classList.remove('active'));
+            const backdrop = document.getElementById('popupBackdrop');
+            if(backdrop) backdrop.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Cookie Banner Logic
+        function closeCookieBanner() {
+            document.getElementById('cookieBanner').classList.remove('active');
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('cookie_consent', 'accepted');
+            closeCookieBanner();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!localStorage.getItem('cookie_consent')) {
+                setTimeout(() => {
+                    document.getElementById('cookieBanner').classList.add('active');
+                }, 1500);
+            }
+        });
     </script>
 </body>
 
