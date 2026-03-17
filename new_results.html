@@ -2608,6 +2608,7 @@
                         <div class="recent-time">${timeAgo(r.timestamp)}</div>
                         <button class="recent-search-btn" onclick="searchAgainFromRecent(${i})">Search again</button>
                     </div>
+                    <button class="fav-remove" style="margin-left: auto;" onclick="removeFromRecent(${i}, this)">&#x2715;</button>
                 </div>
             `).join('');
         }
@@ -2620,6 +2621,17 @@
                 closePopup();
                 window.location.reload();
             }
+        }
+
+        function removeFromRecent(index, btn) {
+            let recents = [];
+            try { recents = JSON.parse(localStorage.getItem('superstyle_recent_searches') || '[]'); } catch (e) { }
+            recents.splice(index, 1);
+            localStorage.setItem('superstyle_recent_searches', JSON.stringify(recents));
+            btn.closest('.recent-item').remove();
+            
+            // Re-render to check if empty & update indices
+            renderRecentPopup();
         }
 
         // ========== FAVORITES ==========
