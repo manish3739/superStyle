@@ -330,7 +330,7 @@
             position: absolute;
             top: 30px;
             left: 60px;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             padding: 4px 16px 4px 6px;
@@ -1892,14 +1892,14 @@
     <!-- Cookie Banner -->
     <div id="cookieBanner" class="cookie-banner">
         <div class="cookie-content">
-            🍪 We use cookies to keep blabla free. By accepting, you support us and accept our <a
+            🍪 We use cookies to keep superstyle free. By accepting, you support us and accept our <a
                 href="javascript:void(0)" onclick="openPopup('terms')">Terms</a> and <a href="javascript:void(0)"
                 onclick="openPopup('privacy')">Privacy</a>.
         </div>
         <div class="cookie-actions">
             <button class="cookie-btn accept" onclick="acceptCookies()">Accept</button>
             <button class="cookie-btn reject" onclick="closeCookieBanner()">Reject non-essential</button>
-            <a href="javascript:void(0)" onclick="openPopup('privacy')" class="privacy-choices">Your Privacy Choices
+            <a href="javascript:void(0)" onclick="openPopup('privacyChoices')" class="privacy-choices">Your Privacy Choices
                 ⚠️</a>
         </div>
     </div>
@@ -2071,6 +2071,43 @@
             <p class="legal-content-text">Email: contact@superstyle.xyz<br>Company: KRKL Tech Limited, Hong Kong SAR</p>
         </div>
     </div>
+
+    <!-- Privacy Choices Popup -->
+    <div id="privacyChoicesPopup" class="popup-panel">
+        <div class="popup-header">
+            <span class="popup-title">Your Privacy Choices</span>
+            <button class="popup-close" onclick="closePopup()">&#x2715;</button>
+        </div>
+        <div class="popup-body">
+            <p class="legal-content-text">Manage your privacy preferences below. You can opt out of affiliate data sharing at any time.</p>
+
+            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="font-size: 15px; font-weight: 600; color: #fff;">Opt-out of affiliate sharing</span>
+                    <label style="position: relative; display: inline-block; width: 48px; height: 26px; cursor: pointer;">
+                        <input type="checkbox" id="affiliateOptOut" style="opacity: 0; width: 0; height: 0;" onchange="toggleAffiliateOptOut(this)">
+                        <span style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #333; border-radius: 26px; transition: 0.3s;"></span>
+                        <span class="toggle-knob" style="position: absolute; top: 2px; left: 2px; width: 22px; height: 22px; background: #fff; border-radius: 50%; transition: 0.3s;"></span>
+                    </label>
+                </div>
+                <p class="legal-content-text" style="margin-bottom: 0; font-size: 13px;">When enabled, we will not share browsing data with affiliate partners. Note: affiliate links will still function, but no tracking cookies will be set.</p>
+            </div>
+
+            <button onclick="savePrivacyChoices()" style="width: 100%; padding: 14px; background: #fff; color: #000; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 10px;">Save Preferences</button>
+
+            <p class="legal-content-text" style="margin-top: 20px; font-size: 12px; opacity: 0.6;">For more details, see our <a href="javascript:void(0)" onclick="openPopup('privacy')" style="color: #fff; text-decoration: underline;">Privacy Policy</a>.</p>
+        </div>
+    </div>
+
+    <style>
+        body.light-mode #privacyChoicesPopup .legal-content-text { color: #555; }
+        body.light-mode #privacyChoicesPopup span[style*="color: #fff"] { color: #000 !important; }
+        body.light-mode #privacyChoicesPopup div[style*="rgba(255,255,255,0.05)"] { background: #F5F5F5 !important; border-color: #E5E5E5 !important; }
+        body.light-mode #privacyChoicesPopup button[style*="background: #fff"] { background: #000 !important; color: #fff !important; }
+        body.light-mode #privacyChoicesPopup a[style*="color: #fff"] { color: #000 !important; }
+        #affiliateOptOut:checked + span { background: #E53E3E !important; }
+        #affiliateOptOut:checked ~ .toggle-knob { left: 24px !important; }
+    </style>
 
     <script>
         // Theme toggle
@@ -2677,6 +2714,7 @@
             let popupId = '';
             if (type === 'privacy') popupId = 'privacyPopup';
             else if (type === 'terms') popupId = 'termsPopup';
+            else if (type === 'privacyChoices') popupId = 'privacyChoicesPopup';
 
             const popup = document.getElementById(popupId);
             const backdrop = document.getElementById('popupBackdrop');
@@ -2685,7 +2723,22 @@
                 popup.classList.add('active');
                 backdrop.classList.add('active');
                 document.body.style.overflow = 'hidden';
+                // Sync toggle state
+                if (type === 'privacyChoices') {
+                    const cb = document.getElementById('affiliateOptOut');
+                    if (cb) cb.checked = localStorage.getItem('superstyle_affiliate_optout') === 'true';
+                }
             }
+        }
+
+        function toggleAffiliateOptOut(cb) {
+            // Visual feedback handled by CSS
+        }
+
+        function savePrivacyChoices() {
+            const cb = document.getElementById('affiliateOptOut');
+            localStorage.setItem('superstyle_affiliate_optout', cb.checked ? 'true' : 'false');
+            closePopup();
         }
 
         function closePopup() {
