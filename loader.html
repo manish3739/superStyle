@@ -280,13 +280,7 @@
                         // Mark as shown so it doesn't run again
                         localStorage.setItem('superstyle_loader_shown', 'true');
 
-                        wrapper.style.opacity = '0';
-                        wrapper.style.visibility = 'hidden';
-                        document.body.classList.remove('loading');
-
-                        setTimeout(() => {
-                            wrapper.remove();
-                        }, 800);
+                        window.location.href = 'new_landing.html';
                     }, 400);
                 }
             }

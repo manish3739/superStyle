@@ -550,38 +550,47 @@
         .footer-left {
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 20px;
         }
 
-        .footer-desc {
-            max-width: 400px;
+        .footer-text-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .footer-text {
             font-size: 14px;
-            color: var(--text-gray);
+            color: #8A8A8A;
+            line-height: 1.4;
         }
 
-        .footer-desc strong {
+        .footer-highlight {
             color: var(--accent-red);
-            font-weight: 400;
+            font-weight: 500;
         }
 
         .footer-links {
             display: flex;
             gap: 24px;
+            list-style: none;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
         }
 
         .footer-links a {
-            color: var(--text-white);
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            opacity: 1;
+            color: #FFFFFF;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            transition: color 0.2s;
         }
 
         .footer-links a:hover {
-            /* color: var(--accent-red); */
+            color: #FFFFFF;
         }
+
 
         .launch-btn {
             width: 48px;
@@ -592,8 +601,8 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
-            color: #680102;
+            transition: all 0.3s;
+            color: #E53E3E;
         }
 
         .launch-btn:hover {
@@ -736,12 +745,20 @@
             border-top-color: #E5E5E5;
         }
 
-        body.light-mode .footer-links a {
+        body.light-mode .footer-text {
             color: #333333;
         }
 
+        body.light-mode .footer-highlight {
+            color: #680202;
+        }
+
+        body.light-mode .footer-links a {
+            color: #5A5A5A;
+        }
+
         body.light-mode .launch-btn {
-            background: #F2F2F7;
+            background: #F5F5F5;
             color: #680202;
         }
 
@@ -1457,6 +1474,14 @@
 </head>
 
 <body>
+    <script>
+        // Apply theme immediately
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+        } else {
+            document.body.classList.remove('light-mode');
+        }
+    </script>
 
     <nav class="navbar">
         <div class="nav-inner">
@@ -1598,16 +1623,15 @@
         <div class="footer-inner">
             <div class="footer-bottom">
                 <div class="footer-left">
-                    <div class="footer-desc">
-                        AI-powered image search for hundreds of stores and brands <strong>find exactly what you're
-                            looking
-                            for – or the perfect dupe.</strong><br>
-
+                    <div class="footer-text-row">
+                        <div class="footer-text">AI-powered image search for hundreds of stores and brands</div>
+                        <div class="footer-text footer-highlight">find exactly what you're looking for - or the perfect
+                            dupe.</div>
                     </div>
                     <div class="footer-links">
-                        <a href="javascript:void(0)" onclick="openPopup('terms')">Terms of Use</a>
-                        <a href="javascript:void(0)" onclick="openPopup('privacy')">Privacy</a>
-                        <a href="#">Contact</a>
+                        <a href="javascript:void(0)" onclick="openPopup('terms')">TERMS OF USE</a>
+                        <a href="javascript:void(0)" onclick="openPopup('privacy')">PRIVACY</a>
+                        <a href="#">CONTACT</a>
                     </div>
                 </div>
                 <div class="launch-btn" onclick="doRandomSearch()">
@@ -1940,10 +1964,6 @@
             localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
         }
 
-        // Load saved theme
-        if (localStorage.getItem('theme') === 'light') {
-            document.body.classList.add('light-mode');
-        }
 
         // Load searched image data
         const searchImageData = localStorage.getItem('superstyle_search_image');
