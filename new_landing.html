@@ -307,71 +307,52 @@
         }
 
         /* Theme Toggle */
-        .theme-toggle {
+        .top-icons-group {
             position: absolute;
             top: 30px;
             right: 80px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 100;
+        }
+
+        .nav-icon-btn {
+            background: #1A1A1A;
+            border: none;
             width: 44px;
             height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-white);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+        }
+
+        .nav-icon-btn:hover {
+            background: #252525;
+            transform: scale(1.05);
+            opacity: 0.8;
+        }
+
+        .theme-toggle {
+            background: #1A1A1A;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s;
-            z-index: 100;
         }
 
         .theme-toggle:hover {
             opacity: 0.8;
             transform: scale(1.05);
-        }
-
-        .back-results-btn {
-            position: absolute;
-            top: 30px;
-            left: 60px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 4px 16px 4px 6px;
-            cursor: pointer;
-            transition: all 0.3s;
-            z-index: 100;
-            background: #FFFFFF;
-            border-radius: 50px;
-            border: 2px solid #000000;
-            color: #000000;
-            font-weight: 600;
-            font-size: 14px;
-            gap: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .back-icon-circle {
-            width: 28px;
-            height: 28px;
-            background: #FFFFFF;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #000000;
-            border: 2px solid #000000;
-        }
-
-        .back-results-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        }
-
-        body.light-mode .back-results-btn {
-            background: #FFFFFF;
-            border-color: #000000;
-            color: #000000;
-        }
-
-        body.light-mode .back-results-btn:hover {
-            background: #FFFFFF;
         }
 
         .theme-icon {
@@ -456,8 +437,15 @@
             color: #680202;
         }
 
-        body.light-mode .theme-toggle {
+        body.light-mode .theme-toggle,
+        body.light-mode .nav-icon-btn {
+            background: #F0F0F0;
             color: #000000;
+        }
+
+        body.light-mode .theme-toggle:hover,
+        body.light-mode .nav-icon-btn:hover {
+            background: #E8E8E8;
         }
 
         body.light-mode .launch-btn {
@@ -863,7 +851,7 @@
             cursor: pointer;
             transition: all 0.3s;
             flex-shrink: 0;
-            color: #680102;
+            color: #E53E3E;
         }
 
         body.light-mode .launch-btn {
@@ -1784,21 +1772,22 @@
 
         <!-- Right Panel with UI -->
         <div class="panel-right">
-            <!-- Theme Toggle -->
-            <div class="theme-toggle" onclick="toggleTheme()">
-                <img src="landing_page_assets/moon.png" alt="Dark Mode" class="theme-icon moon">
-                <img src="landing_page_assets/sun.png" alt="Light Mode" class="theme-icon sun">
-            </div>
-
-            <!-- Back to Results -->
-            <div id="backResultsBtn" class="back-results-btn" onclick="window.location.href='new_results.html'">
-                <div class="back-icon-circle">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+            <!-- Icons Group (Top Right) -->
+            <div class="top-icons-group">
+                <!-- Back to Results Button (Hidden by default, shown via JS) -->
+                <a href="new_results.html" id="backResultsIcon" class="nav-icon-btn" title="Back to Results"
+                    style="display: none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                         stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="9 18 15 12 9 6"></polyline>
+                        <path d="M9 14 4 9l5-5" />
+                        <path d="M4 9h11a4 4 0 1 1 0 8h-1" />
                     </svg>
+                </a>
+                <!-- Theme Toggle -->
+                <div class="theme-toggle" onclick="toggleTheme()">
+                    <img src="landing_page_assets/sun.png" alt="Light Mode" class="theme-icon sun">
+                    <img src="landing_page_assets/moon.png" alt="Dark Mode" class="theme-icon moon">
                 </div>
-                <span style="font-family: 'Inter', sans-serif; letter-spacing: 0.5px;">BACK</span>
             </div>
 
             <!-- Middle Section (Centering prioritized) -->
@@ -1899,7 +1888,8 @@
         <div class="cookie-actions">
             <button class="cookie-btn accept" onclick="acceptCookies()">Accept</button>
             <button class="cookie-btn reject" onclick="closeCookieBanner()">Reject non-essential</button>
-            <a href="javascript:void(0)" onclick="openPopup('privacyChoices')" class="privacy-choices">Your Privacy Choices
+            <a href="javascript:void(0)" onclick="openPopup('privacyChoices')" class="privacy-choices">Your Privacy
+                Choices
                 ⚠️</a>
         </div>
     </div>
@@ -2079,34 +2069,68 @@
             <button class="popup-close" onclick="closePopup()">&#x2715;</button>
         </div>
         <div class="popup-body">
-            <p class="legal-content-text">Manage your privacy preferences below. You can opt out of affiliate data sharing at any time.</p>
+            <p class="legal-content-text">Manage your privacy preferences below. You can opt out of affiliate data
+                sharing at any time.</p>
 
-            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.1);">
+            <div
+                style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.1);">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                     <span style="font-size: 15px; font-weight: 600; color: #fff;">Opt-out of affiliate sharing</span>
-                    <label style="position: relative; display: inline-block; width: 48px; height: 26px; cursor: pointer;">
-                        <input type="checkbox" id="affiliateOptOut" style="opacity: 0; width: 0; height: 0;" onchange="toggleAffiliateOptOut(this)">
-                        <span style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #333; border-radius: 26px; transition: 0.3s;"></span>
-                        <span class="toggle-knob" style="position: absolute; top: 2px; left: 2px; width: 22px; height: 22px; background: #fff; border-radius: 50%; transition: 0.3s;"></span>
+                    <label
+                        style="position: relative; display: inline-block; width: 48px; height: 26px; cursor: pointer;">
+                        <input type="checkbox" id="affiliateOptOut" style="opacity: 0; width: 0; height: 0;"
+                            onchange="toggleAffiliateOptOut(this)">
+                        <span
+                            style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #333; border-radius: 26px; transition: 0.3s;"></span>
+                        <span class="toggle-knob"
+                            style="position: absolute; top: 2px; left: 2px; width: 22px; height: 22px; background: #fff; border-radius: 50%; transition: 0.3s;"></span>
                     </label>
                 </div>
-                <p class="legal-content-text" style="margin-bottom: 0; font-size: 13px;">When enabled, we will not share browsing data with affiliate partners. Note: affiliate links will still function, but no tracking cookies will be set.</p>
+                <p class="legal-content-text" style="margin-bottom: 0; font-size: 13px;">When enabled, we will not share
+                    browsing data with affiliate partners. Note: affiliate links will still function, but no tracking
+                    cookies will be set.</p>
             </div>
 
-            <button onclick="savePrivacyChoices()" style="width: 100%; padding: 14px; background: #fff; color: #000; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 10px;">Save Preferences</button>
+            <button onclick="savePrivacyChoices()"
+                style="width: 100%; padding: 14px; background: #fff; color: #000; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 10px;">Save
+                Preferences</button>
 
-            <p class="legal-content-text" style="margin-top: 20px; font-size: 12px; opacity: 0.6;">For more details, see our <a href="javascript:void(0)" onclick="openPopup('privacy')" style="color: #fff; text-decoration: underline;">Privacy Policy</a>.</p>
+            <p class="legal-content-text" style="margin-top: 20px; font-size: 12px; opacity: 0.6;">For more details, see
+                our <a href="javascript:void(0)" onclick="openPopup('privacy')"
+                    style="color: #fff; text-decoration: underline;">Privacy Policy</a>.</p>
         </div>
     </div>
 
     <style>
-        body.light-mode #privacyChoicesPopup .legal-content-text { color: #555; }
-        body.light-mode #privacyChoicesPopup span[style*="color: #fff"] { color: #000 !important; }
-        body.light-mode #privacyChoicesPopup div[style*="rgba(255,255,255,0.05)"] { background: #F5F5F5 !important; border-color: #E5E5E5 !important; }
-        body.light-mode #privacyChoicesPopup button[style*="background: #fff"] { background: #000 !important; color: #fff !important; }
-        body.light-mode #privacyChoicesPopup a[style*="color: #fff"] { color: #000 !important; }
-        #affiliateOptOut:checked + span { background: #E53E3E !important; }
-        #affiliateOptOut:checked ~ .toggle-knob { left: 24px !important; }
+        body.light-mode #privacyChoicesPopup .legal-content-text {
+            color: #555;
+        }
+
+        body.light-mode #privacyChoicesPopup span[style*="color: #fff"] {
+            color: #000 !important;
+        }
+
+        body.light-mode #privacyChoicesPopup div[style*="rgba(255,255,255,0.05)"] {
+            background: #F5F5F5 !important;
+            border-color: #E5E5E5 !important;
+        }
+
+        body.light-mode #privacyChoicesPopup button[style*="background: #fff"] {
+            background: #000 !important;
+            color: #fff !important;
+        }
+
+        body.light-mode #privacyChoicesPopup a[style*="color: #fff"] {
+            color: #000 !important;
+        }
+
+        #affiliateOptOut:checked+span {
+            background: #E53E3E !important;
+        }
+
+        #affiliateOptOut:checked~.toggle-knob {
+            left: 24px !important;
+        }
     </style>
 
     <script>
@@ -2320,10 +2344,10 @@
     <script>
         /* UI Logic */
         window.addEventListener('DOMContentLoaded', () => {
-            // Check for existing search to show "Back to Results"
-            const backBtn = document.getElementById('backResultsBtn');
-            if (backBtn && localStorage.getItem('superstyle_search_image')) {
-                backBtn.style.display = 'flex';
+            // Check for existing search to show "Back to Results" icon
+            const backIcon = document.getElementById('backResultsIcon');
+            if (backIcon && localStorage.getItem('superstyle_search_image')) {
+                backIcon.style.display = 'flex';
             }
         });
     </script>
